@@ -8631,7 +8631,7 @@ end)
     surface.SetAlphaMultiplier(1)
 end
 
-
+surface.CreateFont("DFont", { font = "Verdana", size = 25, antialias = false, outline = true })
 surface.CreateFont("DTFont", { font = "Verdana", size = 15, antialias = false, outline = true })
 surface.CreateFont("XVIDEOS FONT", { font = "Verdana", size = 45, antialias = false, shadow = true } )
 
@@ -8808,7 +8808,7 @@ do
             surface.SetDrawColor( lc )
             surface.DrawRect( 79, screenHeight-218, ultimate.tyaga / ultimate.maxvape * 58, 12 )
         end
-
+        
         if ultimate.cfg.vars["Tickbase shift"] and ultimate.cfg.vars["Tickbase indicator"] then
             if ded.GetCurrentCharge() <= ultimate.cfg.vars["Shift ticks"] then
                 ccharge = ded.GetCurrentCharge() * 196 / ultimate.cfg.vars["Shift ticks"]
@@ -8870,7 +8870,7 @@ do
             end
         end
 
-        if ultimate.cfg.vars["Crosshair"] then 
+                if ultimate.cfg.vars["Crosshair"] then 
             local cfg = ultimate.cfg.vars["Crosshair type"]
             local hs = Color((CurTime() * 720) % 360, 155, 155)
             local scrw, scrh = ScrW(), ScrH() 
@@ -8924,10 +8924,7 @@ do
                     surface.DrawLine(centerX + offsetY, centerY + csize/1000, centerX + offsetY, centerY + csize/2)
                     surface.DrawLine(centerX + offsetX, centerY + csize/1000, centerX + offsetX, centerY + csize/-2)
             end
-        end 
-
-
-
+        end
 
         if ultimate.cfg.vars["Hitnumbers"] and #ultimate.hitnums > 0 then 
             local n, c = string.ToColor( ultimate.cfg.colors["Hitnumbers"] ), string.ToColor( ultimate.cfg.colors["Hitnumbers krit"] )
@@ -9042,16 +9039,17 @@ do
                 x, y = screenWidth / 2, y + th
             end
         end
-        if ultimate.cfg.vars["WaterMark"] then  
+        if ultimate.cfg.vars["WaterMark"] then
+
             local playerName = IsValid(pLocalPlayer) and pLocalPlayer:Name() or "DISCONNECTED"
-            local txt = "root cheat◆  "  .. playerName .. "  ◆  v3.0 " 
+            local txt = "Statham.PUB  ◆  " .. playerName .. "  ◆  v3.0  ◆  UID:1"
 
             surface.SetFont("Watermark_Bold")
             local txtWidth, txtHeight = surface.GetTextSize(txt)
 
             local paddingX = 30
             local paddingY = 10
-            local x, y = 15, 10
+            local x, y = 15, 15
 
             local bgColor = Color(10, 10, 15, 240)
             local accentColor = Color(0, 180, 255)  
@@ -9075,16 +9073,14 @@ do
             surface.DrawRect(x + txtWidth + paddingX - 15, y + txtHeight + paddingY - 4, 10, 2)
 
             local iconSize = 14
-            if file.Exists("materials/icon16/ruby.vmt", "GAME") then
+            if file.Exists("materials/icon16/shield.vmt", "GAME") then
                 surface.SetMaterial(Material("icon16/shield"))
                 surface.SetDrawColor(textColor)
                 surface.DrawTexturedRect(x + 8, y + (txtHeight + paddingY - iconSize)/2, iconSize, iconSize)
             else
-                draw.SimpleText((""), "Watermark_Symbols", x + 15, y + (txtHeight + paddingY)/2 + 1, accentColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-                end
+                draw.SimpleText("✦", "Watermark_Symbols", x + 15, y + (txtHeight + paddingY)/2 + 1, accentColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             end
         end
-
 
 
         if ultimate.cfg.vars["RusEliteDetector"] then
@@ -9111,6 +9107,7 @@ do
             end)
         end        
 
+
         local plys = player.GetAll()
 
         if ultimate.cfg.vars["Spectator list"] then
@@ -9134,7 +9131,7 @@ do
                     local text = spectatorName .. " spectating " .. targetName
                     local textWidth = surface.GetTextSize(2)
         
-                    local textColor = (v.ObserverTarget == pLocalPlayer) and Color(255, 0, 0) or Color(255, 255, 255)
+                    local textColor = (v.ObserverTarget == pLocalPlayer) and Color(255, 0, 0) or Color(105, 0, 198)
         
                     surface.SetTextPos(screenWidth - textWidth - 360, y)
                     surface.SetTextColor(textColor)
@@ -9144,7 +9141,15 @@ do
             end
         end 
 
-  
+        
+
+
+
+        
+    end
+    
+   
+end
 
 
 
@@ -12691,4 +12696,3 @@ hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
         end
     end
 end)
-end
