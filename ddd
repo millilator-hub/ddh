@@ -12692,8 +12692,9 @@ if IsFirstTimePredicted() and key == KEY_G then
                     end)
                 end
             end
-        end)
+        end
     end
+end)
 hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
             if IsFirstTimePredicted() then
                 local ent = LocalPlayer():GetEyeTrace().Entity
@@ -12706,6 +12707,5 @@ hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
                 end
             end
         end
-    end)
-end
-end
+    end
+end)
