@@ -8808,7 +8808,7 @@ do
             surface.SetDrawColor( lc )
             surface.DrawRect( 79, screenHeight-218, ultimate.tyaga / ultimate.maxvape * 58, 12 )
         end
-end
+
         if ultimate.cfg.vars["Tickbase shift"] and ultimate.cfg.vars["Tickbase indicator"] then
             if ded.GetCurrentCharge() <= ultimate.cfg.vars["Shift ticks"] then
                 ccharge = ded.GetCurrentCharge() * 196 / ultimate.cfg.vars["Shift ticks"]
@@ -9081,7 +9081,7 @@ end
                 surface.DrawTexturedRect(x + 8, y + (txtHeight + paddingY - iconSize)/2, iconSize, iconSize)
             else
                 draw.SimpleText((""), "Watermark_Symbols", x + 15, y + (txtHeight + paddingY)/2 + 1, accentColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
+                end
             end
         end
 
