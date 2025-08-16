@@ -3797,7 +3797,6 @@ function ultimate.tabs.Misc()
     local p = ultimate.itemPanel("Indicators",1,185):GetItemPanel()
     ultimate.ui.CheckBox( p, "Crosshair", "Crosshair" )
     ultimate.ui.ComboBox( p, "Crosshair type", "Crosshair type", {"csgo","csgo2","zalupa"})
-    ultimate.ui.CheckBox( p, "Ban pistol", "Ban pistol" )
 
     local p = ultimate.itemPanel("Key spam",1,165):GetItemPanel()
 
