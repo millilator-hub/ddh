@@ -1,4 +1,4 @@
-require("zxcmodule")
+require("zxcmodule") --c
 ded.Write = nil
 ded.Read = nil
 
