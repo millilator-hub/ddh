@@ -12681,31 +12681,14 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
         ultimate.alreadyNotified[ent] = nil
     end
 end)
-hook.Add('PlayerButtonDown', 'return:penis', function(z, key)
-if IsFirstTimePredicted() and key == KEY_G then
-                local ent = LocalPlayer():GetEyeTrace().Entity
-
-                if ent and ent:IsPlayer() then
-                    RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
-                    timer.Simple(3, fuвnction()
-                        RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
-                    end)
-                end
-            end
-        end
-    end
-end)
+end
 hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
-            if IsFirstTimePredicted() then
-                local ent = LocalPlayer():GetEyeTrace().Entity
+    if IsFirstTimePredicted() and key == KEY_G then
+        local ent = LocalPlayer():GetEyeTrace().Entity
 
-                if ent and ent:IsPlayer() then
-                    RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
-                    timer.Simple(3, function()
-                        RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
-                    end)
-                end
-            end
+        if ent and ent:IsPlayer() then
+            RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
         end
     end
 end)
+end
