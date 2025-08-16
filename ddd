@@ -18,7 +18,7 @@ surface.CreateFont("Watermark_Bold", {
     font = "Verdana",
     size = 13,
     weight = 1000,
-    antialias = true,
+    antialias = true,   
     shadow = true
 })
 
@@ -674,7 +674,6 @@ ultimate.cfg.vars["Tickbase indicator"] = false
 ultimate.cfg.vars["Spectator list"] = false
 ultimate.cfg.vars["Crosshair"] = false
 ultimate.cfg.vars["Crosshair type"] = 1
-
 ultimate.cfg.vars["RusEliteDetector"]   = false
 
 ultimate.cfg.vars["Killsound"] = false
@@ -757,6 +756,7 @@ ultimate.cfg.vars["Flashlight spam"] = false
 ultimate.cfg.vars["Impulse spam"] = false
 ultimate.cfg.vars["Camera spam"] = false
 ultimate.cfg.vars["Fast lockpick"] = false
+
 
 
 ultimate.cfg.vars["Config name"] = "new"
@@ -8808,7 +8808,7 @@ do
             surface.SetDrawColor( lc )
             surface.DrawRect( 79, screenHeight-218, ultimate.tyaga / ultimate.maxvape * 58, 12 )
         end
-        
+end
         if ultimate.cfg.vars["Tickbase shift"] and ultimate.cfg.vars["Tickbase indicator"] then
             if ded.GetCurrentCharge() <= ultimate.cfg.vars["Shift ticks"] then
                 ccharge = ded.GetCurrentCharge() * 196 / ultimate.cfg.vars["Shift ticks"]
@@ -8925,6 +8925,8 @@ do
                     surface.DrawLine(centerX + offsetX, centerY + csize/1000, centerX + offsetX, centerY + csize/-2)
             end
         end 
+
+
 
 
         if ultimate.cfg.vars["Hitnumbers"] and #ultimate.hitnums > 0 then 
@@ -9082,7 +9084,6 @@ do
 
             end
         end
-    end
 
 
 
@@ -9146,7 +9147,7 @@ do
   
 
 
-end
+
 
 
 hook.Add("PostDrawTranslucentRenderables", "DrawKnifebotRange", function()
@@ -10789,7 +10790,6 @@ do
 
             tracercolor.a = oldAlpha
         end
-
         
 
         if ultimate.cfg.vars["Auto peak"] and ultimate.startedPeeking then
@@ -10824,8 +10824,8 @@ do
             cam.IgnoreZ( false )
         end
         */
-    end 
-end
+        end
+
 
 /*
     hooks -> FrameStageNotify ( c++ module )
@@ -11670,8 +11670,6 @@ ultimate.AddHook( "SetupSkyboxFog" )
 
 ultimate.AddHook( "ShouldDrawLocalPlayer" )
 ultimate.AddHook( "CalcMainActivity" )
-
-
 
 ultimate.knownTrackedPlayers = ultimate.knownTrackedPlayers or {}
 ultimate.alreadyNotified = ultimate.alreadyNotified or {}
@@ -12683,26 +12681,31 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
         ultimate.alreadyNotified[ent] = nil
     end
 end)
-ultimate.AddHook( "DrawCustomCrosshair" )
 hook.Add('PlayerButtonDown', 'return:penis', function(z, key)
-    if IsFirstTimePredicted() and key == KEY_H then
-        local ent = LocalPlayer():GetEyeTrace().Entity
+if IsFirstTimePredicted() and key == KEY_G then
+                local ent = LocalPlayer():GetEyeTrace().Entity
 
-        if ent and ent:IsPlayer() then
-            RunConsoleCommand('ba', 'return', ent:SteamID())
-        end
+                if ent and ent:IsPlayer() then
+                    RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
+                    timer.Simple(3, fuвnction()
+                        RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
+                    end)
+                end
+            end
+        end)
     end
-end)
-ultimate.AddHook( "DrawCustomCrosshair" )
-    hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
-        if IsFirstTimePredicted() and key == KEY_G then
-            local ent = LocalPlayer():GetEyeTrace().Entity
+hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
+            if IsFirstTimePredicted() then
+                local ent = LocalPlayer():GetEyeTrace().Entity
 
-            if ent and ent:IsPlayer() then
-                RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
-                timer.Simple(3, function()
-                    RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
-                end)
+                if ent and ent:IsPlayer() then
+                    RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
+                    timer.Simple(3, function()
+                        RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
+                    end)
+                end
             end
         end
     end)
+end
+end
