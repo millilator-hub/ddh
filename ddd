@@ -1,7 +1,85 @@
 require("zxcmodule")
 ded.Write = nil
 ded.Read = nil
+if CLIENT then
+    local function CreateCustomMenu()
+        local frame = vgui.Create("DFrame")
+        frame:SetSize(500, 400) 
+        frame:Center()
+        frame:SetTitle("dezzaster")
+        frame:ShowCloseButton(false)
+        frame:SetDraggable(true)
+        frame:MakePopup()
 
+        frame.Paint = function(self, w, h)
+            draw.RoundedBox(8, 0, 0, w, h, Color(163, 0, 0, 30))
+            draw.RoundedBox(8, 2, 2, w-4, h-4, Color(163, 0, 0, 30))
+            draw.RoundedBox(8, 0, 0, w, 60, Color(163, 162, 162, 255))
+            draw.RoundedBox(8, 2, 2, w-4, 56, Color(56, 5, 14, 255))
+            surface.SetDrawColor(70,70,80)                                                                                                                                                                                                                                                   
+        end
+
+        -- Первый заголовок
+        local titleLabel1 = vgui.Create("DLabel", frame)
+        titleLabel1:SetPos(20,20)
+        titleLabel1:SetText("Обновление")
+        titleLabel1:SetFont("DermaLarge")
+        titleLabel1:SizeToContents()
+
+        -- Третий заголовок (под вторым)
+        local titleLabel3 = vgui.Create("DLabel", frame)
+        titleLabel3:SetPos(20,60) -- ниже второго
+        titleLabel3:SetText("-Upd:Add friend or priority list(visuals>player)")
+        titleLabel3:SetFont("DTFont")
+        titleLabel3:SizeToContents()
+
+        local titleLabel4 = vgui.Create("DLabel", frame)
+        titleLabel4:SetPos(20,100) -- ниже второго
+        titleLabel4:SetText("-Upd:New Crosshair mods (misc<indicators)")
+        titleLabel4:SetFont("DTFont")
+        titleLabel4:SizeToContents()
+        local titleLabel5 = vgui.Create("DLabel", frame)
+        titleLabel5:SetPos(20,80) -- ниже второго
+        titleLabel5:SetText("-Upd:Impulse spam (misc>key spam)")
+        titleLabel5:SetFont("DTFont")
+        titleLabel5:SizeToContents()
+        local titleLabel6 = vgui.Create("DLabel", frame)
+        titleLabel6:SetPos(20,120) -- ниже второго
+        titleLabel6:SetText("-Upd:Usergroup (2 варианта) (visuals<player)")
+        titleLabel6:SetFont("DTFont")
+        titleLabel6:SizeToContents()
+        -- Панель для текста внизу
+        local bottomPanel = vgui.Create("DPanel", frame)
+        bottomPanel:Dock(BOTTOM)
+        bottomPanel:DockMargin(20,-10,-20,-10) -- отступы
+        bottomPanel:SetTall(50)
+
+        -- Текст в панели
+        local bottomText = vgui.Create("DLabel", bottomPanel)
+        bottomText:Dock(FILL)
+        bottomText:SetText("17.08.2025")
+        bottomText:SetWrap(true)
+        bottomText:SetContentAlignment(5)
+
+        -- Кнопка "Закрыть"
+        local closeBtn = vgui.Create("DButton", frame)
+        closeBtn:SetSize(100,30)
+
+        -- Расположим кнопку справа снизу
+        closeBtn:SetPos(frame:GetWide() - closeBtn:GetWide() -20 , frame:GetTall() - closeBtn:GetTall() -10 )
+        
+        closeBtn:SetText("Закрыть")
+        
+        function closeBtn:DoClick()
+            if IsValid(frame) then
+                frame:Remove()
+            end
+        end
+
+    end
+
+    CreateCustomMenu()
+end
 local ultimate                          = {}
 
 
@@ -9,11 +87,6 @@ local MetaPlayer                        = FindMetaTable("Player")
 
 local TraceHull                         = util.TraceHull    
 local TraceLine                         = util.TraceLine
-
-
-
-
-
 surface.CreateFont("Watermark_Bold", {
     font = "Verdana",
     size = 13,
@@ -56,9 +129,9 @@ local settings = {
 }
 
 local theme = {
-    ["Frame background"] = Color(20, 10, 30),      
-    ["Frame foreground"] = Color(40, 20, 60),     
-    ["Frame title"] = Color(180, 120, 220),        
+    ["Frame background"] = Color(30, 10, 10, 200),      
+    ["Frame foreground"] = Color(56, 18, 18, 200),     
+    ["Frame title"] = Color(220, 120, 120),        
 }
 
 local pLocalPlayer = LocalPlayer()
@@ -528,8 +601,10 @@ ultimate.cfg.vars["Name pos"] = 1
 ultimate.cfg.vars["Mark"] = false
 ultimate.cfg.vars["Mark pos"] = 1
 
-ultimate.cfg.vars["Usergroup"] = false
-ultimate.cfg.vars["Usergroup pos"] = 1
+ultimate.cfg.vars["Usergroup icon"] = false
+ultimate.cfg.vars["Usergroup icon pos"] = 1
+ultimate.cfg.vars["Usergroup TXT pos"] = 1
+ultimate.cfg.vars["Usergroup TXT"] = false
 
 ultimate.cfg.vars["Team"] = false
 ultimate.cfg.vars["Team pos"] = 1
@@ -632,7 +707,6 @@ ultimate.cfg.vars["ESP Distance"] = 3500
 
 ultimate.cfg.binds["Player add"] = 0
 ultimate.cfg.binds["Priority add"] = 0
-
 // Entity Esp
 ultimate.cfg.binds["Ent add"] = 0
 ultimate.cfg.vars["Ent box"] = false
@@ -754,6 +828,7 @@ ultimate.cfg.vars["GFID"] = "SteamID"
 ultimate.cfg.vars["Use spam"] = false
 ultimate.cfg.vars["Flashlight spam"] = false
 ultimate.cfg.vars["Impulse spam"] = false
+ultimate.cfg.binds["Impulse spam"] = 0
 ultimate.cfg.vars["Camera spam"] = false
 ultimate.cfg.vars["Fast lockpick"] = false
 
@@ -1179,7 +1254,7 @@ do
         surface.DrawRect(0, 0, w, 25)
 
         surface.SetFont("DermaSmall")
-        local text = "K A T S U N N Y"
+        local text = "                                                                                               D E Z Z A S T E R | H A C K"
         local text_w, text_h = surface.GetTextSize(text)
         
         surface.SetTextColor(0, 0, 0, 50)
@@ -3029,7 +3104,7 @@ end
 */
 
 ultimate.espposes = {"Up","Down","Right","Left"}
-ultimate.espelements = {"Name pos","Mark pos","Usergroup pos","Health pos","Armor pos","Money pos","Weapon pos","Team pos","Break LC pos","Simtime pos"}
+ultimate.espelements = {"Name pos","Mark pos"," usergroup icon pos","usergroup TXT pos","Health pos","Armor pos","Money pos","Weapon pos","Team pos","Break LC pos","Simtime pos"}
 ultimate.lastdrag = ""
 ultimate.esppans = {}
 
@@ -3502,12 +3577,13 @@ ultimate.spfuncs[34] = function()
 end
 function ultimate.tabs.Visuals()
 
-    local p = ultimate.itemPanel("Player",1,440):GetItemPanel()
+    local p = ultimate.itemPanel("Player",1,470):GetItemPanel()
     ultimate.ui.CheckBox( p, "Box", "Box esp", false, false, true, ultimate.spfuncs[11] )
 
     ultimate.ui.CheckBox( p, "Name", "Name", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Name pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
     ultimate.ui.CheckBox( p, "Mark", "Mark", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Mark pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
-    ultimate.ui.CheckBox( p, "Usergroup", "Usergroup", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Usergroup pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    ultimate.ui.CheckBox( p, "Usergroup icon", "Usergroup icon", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Usergroup icon pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
+    ultimate.ui.CheckBox( p, "Usergroup TXT", "Usergroup TXT", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Usergroup TXT pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
     ultimate.ui.CheckBox( p, "Health", "Health", false, false, true, ultimate.spfuncs[12], false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Health pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) ultimate.ui.ColorPicker( "Health bar gradient", p ) end )
     ultimate.ui.CheckBox( p, "Armor", "Armor", false, false, true, ultimate.spfuncs[666], false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Armor pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) ultimate.ui.ColorPicker( "Armor bar gradient", p ) end )
     ultimate.ui.CheckBox( p, "Weapon", "Weapon", false, false, false, ultimate.spfuncs[33], false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Weapon pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(3,0,0,0) end )
@@ -3529,7 +3605,8 @@ function ultimate.tabs.Visuals()
 
     ultimate.ui.Slider( p, "Max distance","ESP Distance", 0, 20000,0 )
 
-    ultimate.ui.Label( p, "Add player key", function( p ) ultimate.ui.Binder( "Player add", p ) end )
+    ultimate.ui.Label( p, "Friend List add", function( p ) ultimate.ui.Binder( "Player add", p ) end )
+    ultimate.ui.Label( p, "Priority List add", function( p ) ultimate.ui.Binder( "Priority add", p ) end )
 
     local p = ultimate.itemPanel("Entity",1,135):GetItemPanel()
 
@@ -3796,13 +3873,13 @@ function ultimate.tabs.Misc()
 
     local p = ultimate.itemPanel("Indicators",1,185):GetItemPanel()
     ultimate.ui.CheckBox( p, "Crosshair", "Crosshair" )
-    ultimate.ui.ComboBox( p, "Crosshair type", "Crosshair type", {"csgo","csgo2","zalupa"})
+    ultimate.ui.ComboBox( p, "Crosshair type", "Crosshair type", {"csgo","csgo2","Свастика","csgo3", "csgo4"})
 
     local p = ultimate.itemPanel("Key spam",1,165):GetItemPanel()
 
     ultimate.ui.CheckBox( p, "Use spam", "Use spam" )
     ultimate.ui.CheckBox( p, "Flashlight spam", "Flashlight spam" )
-    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam" )
+    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam", false, true, false )
     ultimate.ui.CheckBox( p, "Camera spam", "Camera spam" )
     ultimate.ui.CheckBox( p, "Vape spam", "Vape spam" )
     ultimate.ui.CheckBox( p, "Retry on handcuff", "Retry on handcuff" )
@@ -7250,9 +7327,14 @@ function ultimate.CreateMove(cmd)
     if ultimate.cfg.vars["Flashlight spam"] and input.IsKeyDown( KEY_F ) then
         cmd:SetImpulse(100)
     end
-    if ultimate.cfg.vars["Impulse spam"] then
-        cmd:SetImpulse(50)
+
+    if ultimate.cfg.vars["Impulse spam"] and ultimate.cfg.binds["Impulse spam"] then
+        local Key = ultimate.cfg.binds["Impulse spam"]
+        if input.IsKeyDown( Key ) then
+            cmd:SetImpulse(50)
+        end
     end
+
 
     if ultimate.cfg.vars["Auto Vape"] then
         if cmd:KeyDown( IN_ATTACK ) then
@@ -8245,9 +8327,9 @@ end
 
         surface.SetTextColor( ultimate.Colors[255] )
 
-if ultimate.cfg.vars["Usergroup"] then
+if ultimate.cfg.vars["Usergroup icon"] then
     local name = v.GetUserGroup -- название группы
-    local pos = ultimate.cfg.vars["Usergroup pos"]
+    local pos = ultimate.cfg.vars["Usergroup icon pos"]
     local tw, th = surface.GetTextSize(name)
 
     -- Позиции для текста
@@ -8380,6 +8462,20 @@ if ultimate.cfg.vars["Usergroup"] then
         surface.DrawTexturedRect(iconX, iconY, iconSize, iconSize)
     end
 end
+        if ultimate.cfg.vars["Usergroup TXT"] then
+            local name = v.GetUserGroup -- название группы
+            local pos = ultimate.cfg.vars["Usergroup TXT pos"]
+            local tw, th = surface.GetTextSize(name)
+
+            -- Позиции для текста
+            local textX = poses[pos] - ultimate.getTextX(v, tw, pos)
+            local textY = ultimate.getTextY(MaxY, MinY, th, pos, ttbl[pos])
+
+            -- Рисуем текст
+            surface.SetTextPos(textX, textY)
+            surface.DrawText(name)
+        end
+    
         if ultimate.cfg.vars["Mark"] then 
             local gay = cheaters.list[v.entity:SteamID()]
             
@@ -8632,7 +8728,8 @@ end)
 end
 
 surface.CreateFont("DFont", { font = "Verdana", size = 25, antialias = false, outline = true })
-surface.CreateFont("DTFont", { font = "Verdana", size = 15, antialias = false, outline = true })
+surface.CreateFont("DTFont", { font = "Verdana", size = 20, antialias = false, outline = true })
+surface.CreateFont("newfont", { font = "HudHintTextLarge", size = 30, antialias = false, outline = true })
 surface.CreateFont("XVIDEOS FONT", { font = "Verdana", size = 45, antialias = false, shadow = true } )
 
 ultimate.fovColor = Color( 255, 255, 255 )
@@ -8877,34 +8974,43 @@ do
             local scrwc, scrhc = scrw / 2, scrh / 2  
             
             if cfg == 1 then
-                surface.SetFont("Default")
-                local hs = Color((CurTime() * 720) % 360, 155, 155)
-                local x, y = scrwc - 20, scrhc - 13
-                local x1, y1 = scrwc - 3, scrhc - 23
-                local x2, y2 = scrwc - 3, scrhc + 9
-                local x3, y3 = scrwc - 3, scrhc - 9
+                local scrw, scrh = ScrW(), ScrH()
+                local centerX, centerY = scrw / 2, scrh / 2
+                local time = CurTime() % 1
+                local color = HSVToColor(time * 360, 1, 1)
 
-                draw.SimpleText("_      _", "Default", x, y, hs) 
-                draw.SimpleText("|", "Default", x1, y1, hs)
-                draw.SimpleText("|", "Default", x2, y2, hs)
-                draw.SimpleText(".", "Default", x3, y3, hs)
-                
+                local size = 50
+                local offsetX = 30
+                local offsetY = 30
+
+                surface.SetDrawColor(color)
+                surface.DrawLine(centerX, centerY - size / 2, centerX, centerY + size / 2)
+                surface.DrawLine(centerX - size / 2, centerY, centerX + size / 2, centerY)
+
+                surface.DrawLine(centerX - size / 4, centerY - offsetY, centerX + size / 4, centerY - offsetY)
+                surface.DrawLine(centerX - size / 4, centerY + offsetY, centerX + size / 4, centerY + offsetY)
+                surface.DrawLine(centerX - offsetX, centerY - size / 4, centerX - offsetX, centerY + size / 4)
+                surface.DrawLine(centerX + offsetX, centerY - size / 4, centerX + offsetX, centerY + size / 4)
+
+                local dotSize = 4
+                surface.DrawRect(centerX - size/2 - dotSize/2, centerY - size/2 - dotSize/2, dotSize, dotSize)
+                surface.DrawRect(centerX + size/2 - dotSize/2, centerY - size/2 - dotSize/2, dotSize, dotSize)
+                surface.DrawRect(centerX - size/2 - dotSize/2, centerY + size/2 - dotSize/2, dotSize, dotSize)
+                surface.DrawRect(centerX + size/2 - dotSize/2, centerY + size/2 - dotSize/2, dotSize, dotSize)
+
+
+   
             elseif cfg == 2 then
                 local csizew = 1
 
                 draw.RoundedBox(0, scrwc - csizew/2 - 1, scrhc - csizew/2 - 1, csizew + 2, csizew + 2, hs)
                 draw.RoundedBox(0, scrwc - csizew/2, scrhc - csizew/2, csizew, csizew, hs)
-
-                --left
                 draw.RoundedBox(0, scrwc - csizew - 16, scrhc - csizew/2 - 1, csizew + 2 + 10, csizew + 2, hs)
-                draw.RoundedBox(0, scrwc - csizew - 15, scrhc - csizew/2, csizew + 10, csizew, hs)
-                --right
+                draw.RoundedBox(0, scrwc + 3, scrhc - csizew/2 - 1, csizew + 12, csizew + 2, hs)
                 draw.RoundedBox(0, scrwc + 3, scrhc - csizew/2 - 1, csizew + 12, csizew + 2, hs)
                 draw.RoundedBox(0, scrwc + 4, scrhc - csizew/2, csizew + 10, csizew, hs)
-                --top
                 draw.RoundedBox(0, scrwc - csizew/2 - 1, scrhc - csizew/2 - 16, csizew + 2, csizew + 12, hs)
                 draw.RoundedBox(0, scrwc - csizew/2, scrhc - csizew/2 - 15, csizew, csizew + 10, hs)
-                --down
                 draw.RoundedBox(0, scrwc - csizew/2 - 1, scrhc + 3, csizew + 2, csizew + 12, hs)
                 draw.RoundedBox(0, scrwc - csizew/2, scrhc + 4, csizew, csizew + 10, hs)
             elseif cfg == 3 then
@@ -8923,8 +9029,44 @@ do
                     surface.DrawLine(centerX - csize/1000, centerY - offsetX, centerX + csize/-2, centerY - offsetX)
                     surface.DrawLine(centerX + offsetY, centerY + csize/1000, centerX + offsetY, centerY + csize/2)
                     surface.DrawLine(centerX + offsetX, centerY + csize/1000, centerX + offsetX, centerY + csize/-2)
+                elseif cfg == 4 then
+                    local scrw, scrh = ScrW(), ScrH()
+                    local centerX, centerY = scrw / 2, scrh / 2
+
+                    local time = CurTime() % 1
+                    local color = HSVToColor(time * 360, 1, 1)
+
+                    local crossSize = 30
+                    local shortLineLength = 10
+                    local gap = 15
+
+                    surface.SetDrawColor(color)
+
+                    surface.DrawLine(centerX, centerY - crossSize / 2, centerX, centerY + crossSize / 2)
+                    surface.DrawLine(centerX - crossSize / 2, centerY, centerX + crossSize / 2, centerY)
+                    surface.DrawLine(centerX - shortLineLength / 2, centerY - gap, centerX + shortLineLength / 2, centerY - gap)
+                    surface.DrawLine(centerX - shortLineLength / 2, centerY + gap, centerX + shortLineLength / 2, centerY + gap)
+                    surface.DrawLine(centerX - gap, centerY - shortLineLength / 2, centerX - gap, centerY + shortLineLength / 2)
+                    surface.DrawLine(centerX + gap, centerY - shortLineLength / 2, centerX + gap, centerY + shortLineLength / 2)
+                elseif cfg == 5 then
+                    local scrw, scrh = ScrW(), ScrH()
+                    local centerX, centerY = scrw / 2, scrh / 2
+                    local time = CurTime() % 1
+                    local color = HSVToColor(time * 360, 1, 1)
+
+                    local crossSize = 40
+                    local lineLength = 15
+                    local gap = 10
+
+                    surface.SetDrawColor(color)
+
+                    surface.DrawLine(centerX, centerY - crossSize / 2, centerX, centerY + crossSize / 2)
+                    surface.DrawLine(centerX - crossSize / 2, centerY, centerX + crossSize / 2, centerY)
+
+
+                end
             end
-        end
+
 
         if ultimate.cfg.vars["Hitnumbers"] and #ultimate.hitnums > 0 then 
             local n, c = string.ToColor( ultimate.cfg.colors["Hitnumbers"] ), string.ToColor( ultimate.cfg.colors["Hitnumbers krit"] )
@@ -9042,7 +9184,7 @@ do
         if ultimate.cfg.vars["WaterMark"] then
 
             local playerName = IsValid(pLocalPlayer) and pLocalPlayer:Name() or "DISCONNECTED"
-            local txt = "Statham.PUB  ◆  " .. playerName .. "  ◆  v3.0  ◆  UID:1"
+            local txt = "root hack  ◆  " .. playerName .. "  ◆  V1  ◆  UID:1"
 
             surface.SetFont("Watermark_Bold")
             local txtWidth, txtHeight = surface.GetTextSize(txt)
@@ -9131,7 +9273,7 @@ do
                     local text = spectatorName .. " spectating " .. targetName
                     local textWidth = surface.GetTextSize(2)
         
-                    local textColor = (v.ObserverTarget == pLocalPlayer) and Color(255, 0, 0) or Color(105, 0, 198)
+                    local textColor = (v.ObserverTarget == pLocalPlayer) and Color(255, 0, 0) or Color(255, 255, 255)
         
                     surface.SetTextPos(screenWidth - textWidth - 360, y)
                     surface.SetTextColor(textColor)
@@ -9798,7 +9940,7 @@ ultimate.chatmsg =
         [4] = {"dd"
         },
         [5] = {
-    "ап" },
+    "dd" },
     [6] = {"DD"  
         },
     [7] = {"dd"
@@ -10307,8 +10449,7 @@ if ultimate.IsKeyDown(ultimate.cfg.binds["Player add"]) and not ultimate.ekd2 th
         end
     end
 end
-
-if ultimate.IsKeyDown(ultimate.cfg.binds["Priority add"] or KEY_F4) and not ultimate.ekd3 then
+if ultimate.IsKeyDown(ultimate.cfg.binds["Priority add"]) and not ultimate.ekd3 then
     local tr = pLocalPlayer:GetEyeTrace().Entity
 
     if IsValid(tr) and tr:GetClass() == "player" then 
