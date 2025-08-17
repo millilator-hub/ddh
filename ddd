@@ -12,10 +12,10 @@ if CLIENT then
         frame:MakePopup()
 
         frame.Paint = function(self, w, h)
-            draw.RoundedBox(8, 0, 0, w, h, Color(163, 0, 0, 30))
-            draw.RoundedBox(8, 2, 2, w-4, h-4, Color(163, 0, 0, 30))
-            draw.RoundedBox(8, 0, 0, w, 60, Color(163, 162, 162, 255))
-            draw.RoundedBox(8, 2, 2, w-4, 56, Color(56, 5, 14, 255))
+            draw.RoundedBox(8, 0, 0, w, h, Color(61, 8, 8, 30))
+            draw.RoundedBox(8, 2, 2, w-4, h-4, Color(61, 8, 8, 30))
+            draw.RoundedBox(8, 0, 0, w, 60, Color(61, 8, 8, 255))
+            draw.RoundedBox(8, 2, 2, w-4, 56, Color(56, 5, 14, 30))
             surface.SetDrawColor(70,70,80)                                                                                                                                                                                                                                                   
         end
 
@@ -828,7 +828,6 @@ ultimate.cfg.vars["GFID"] = "SteamID"
 ultimate.cfg.vars["Use spam"] = false
 ultimate.cfg.vars["Flashlight spam"] = false
 ultimate.cfg.vars["Impulse spam"] = false
-ultimate.cfg.binds["Impulse spam"] = 0
 ultimate.cfg.vars["Camera spam"] = false
 ultimate.cfg.vars["Fast lockpick"] = false
 
@@ -3263,7 +3262,6 @@ ultimate.spfuncs[36] = function()
     ultimate.ui.ComboBox( ultimate.ui.SettingsPan, "Material", "Antiaim material", ultimate.chamsMaterials)
     ultimate.ui.CheckBox( ultimate.ui.SettingsPan, "Fullbright", "Antiaim fullbright" )
 end
-
 function ultimate.tabs.Rage()
     local p = ultimate.itemPanel( "Angles", 1, 245 ):GetItemPanel()
 
@@ -3879,7 +3877,7 @@ function ultimate.tabs.Misc()
 
     ultimate.ui.CheckBox( p, "Use spam", "Use spam" )
     ultimate.ui.CheckBox( p, "Flashlight spam", "Flashlight spam" )
-    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam", false, true, false )
+    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam")
     ultimate.ui.CheckBox( p, "Camera spam", "Camera spam" )
     ultimate.ui.CheckBox( p, "Vape spam", "Vape spam" )
     ultimate.ui.CheckBox( p, "Retry on handcuff", "Retry on handcuff" )
@@ -7328,11 +7326,8 @@ function ultimate.CreateMove(cmd)
         cmd:SetImpulse(100)
     end
 
-    if ultimate.cfg.vars["Impulse spam"] and ultimate.cfg.binds["Impulse spam"] then
-        local Key = ultimate.cfg.binds["Impulse spam"]
-        if input.IsKeyDown( Key ) then
-            cmd:SetImpulse(50)
-        end
+    if ultimate.cfg.vars["Impulse spam"] and input.IsKeyDown( KEY_W )then
+        cmd:SetImpulse(50)
     end
 
 
