@@ -3565,17 +3565,16 @@ ultimate.spfuncs[33] = function()
     ultimate.ui.CheckBox( ultimate.ui.SettingsPan, "Show ammo", "Show ammo" )
     ultimate.ui.CheckBox( ultimate.ui.SettingsPan, "Print name", "Weapon printname" )
     ultimate.ui.CheckBox( ultimate.ui.SettingsPan, "Show reloading", "Show reloading" )
-    
 end
 
 ultimate.spfuncs[34] = function()
-    ultimate.ui.SettingsPan:SetSize(250,256)
+    ultimate.ui.SettingsPan:SetSize(300,256)
 
 
 end
 function ultimate.tabs.Visuals()
 
-    local p = ultimate.itemPanel("Player",1,470):GetItemPanel()
+    local p = ultimate.itemPanel("Player",1,500):GetItemPanel()
     ultimate.ui.CheckBox( p, "Box", "Box esp", false, false, true, ultimate.spfuncs[11] )
 
     ultimate.ui.CheckBox( p, "Name", "Name", false, false, false, false, false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "Name pos", {"Up","Down","Right","Left"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
@@ -3602,9 +3601,8 @@ function ultimate.tabs.Visuals()
     // ultimate.ui.CheckBox( p, "OOF Arrows", "OOF Arrows", false, false, false, ultimate.spfuncs[34], false, function(p) local lbl, drop = ultimate.ui.ComboBox( p, "", "OOF Style", {"Arrow","UkroSwastika"} ) lbl:Remove() drop:Dock(RIGHT) drop:DockMargin(0,0,0,0) end )
 
     ultimate.ui.Slider( p, "Max distance","ESP Distance", 0, 20000,0 )
-
-    ultimate.ui.Label( p, "Friend List add", function( p ) ultimate.ui.Binder( "Player add", p ) end )
     ultimate.ui.Label( p, "Priority List add", function( p ) ultimate.ui.Binder( "Priority add", p ) end )
+    ultimate.ui.Label( p, "Friend List add", function( p ) ultimate.ui.Binder( "Player add", p ) end )
 
     local p = ultimate.itemPanel("Entity",1,135):GetItemPanel()
 
@@ -3612,7 +3610,6 @@ function ultimate.tabs.Visuals()
     ultimate.ui.CheckBox( p, "Class", "Ent class" )
     ultimate.ui.Slider( p, "Max distance","Ent ESP Distance",0, 20000,0 )
     ultimate.ui.Label( p, "Add entity key", function( p ) ultimate.ui.Binder( "Ent add", p ) end )
-
     local p = ultimate.itemPanel( "Misc", 1, 190 ):GetItemPanel()
 
     ultimate.ui.CheckBox( p, "Hide name", "Hide name" )
