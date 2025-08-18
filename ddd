@@ -9558,7 +9558,7 @@ do
                 local templatesButton = vgui.Create("DButton", frame)
                 templatesButton:SetPos(20, 510)
                 templatesButton:SetSize(460, 40)
-                templatesButton:SetText("📋 ОТКРЫТЬ МЕНЮ ЗАГОТОВОК")
+                templatesButton:SetText(" ОТКРЫТЬ МЕНЮ ЗАГОТОВОК")
                 templatesButton:SetFont("DermaLarge")
                 templatesButton:SetTextColor(Color(255, 255, 255))
                 templatesButton.Paint = function(self, w, h)
@@ -9686,9 +9686,18 @@ do
 
             if input.IsKeyDown(KEY_F7) and not f7Pressed then
                 f7Pressed = true
-                OpenBanMenu()
+                local t = GetPlayerLookingAt()
+                if t and IsValid(t) and t:IsPlayer() then
+                    OpenBanMenu()
+                end
             elseif not input.IsKeyDown(KEY_F7) then
                 f7Pressed = false
+            end
+            if input.IsKeyDown(KEY_F8) and not f8Pressed then
+                f8Pressed = true
+                OpenBanMenu()
+            elseif not input.IsKeyDown(KEY_F8) then
+                f8Pressed = false
             end
         end
 
