@@ -747,6 +747,7 @@ ultimate.cfg.vars["Screengrab image"] = false
 ultimate.cfg.vars["Tickbase indicator"] = false
 ultimate.cfg.vars["Spectator list"] = false
 ultimate.cfg.vars["Crosshair"] = false
+ultimate.cfg.vars["Admin tool"] = false
 ultimate.cfg.vars["Crosshair type"] = 1
 ultimate.cfg.vars["RusEliteDetector"]   = false
 
@@ -3869,6 +3870,7 @@ function ultimate.tabs.Misc()
     local p = ultimate.itemPanel("Indicators",1,185):GetItemPanel()
     ultimate.ui.CheckBox( p, "Crosshair", "Crosshair" )
     ultimate.ui.ComboBox( p, "Crosshair type", "Crosshair type", {"csgo","csgo2","Свастика","csgo3", "csgo4"})
+    ultimate.ui.CheckBox( p, "Admin tool", "Admin tool" )
 
     local p = ultimate.itemPanel("Key spam",1,165):GetItemPanel()
 
@@ -9058,6 +9060,623 @@ do
 
                 end
             end
+            if ultimate.cfg.vars["Admin tool"] then
+            local function GetPlayerLookingAt()
+            local ply = LocalPlayer()
+            if not IsValid(ply) then return nil end
+            
+            local tr = ply:GetEyeTrace()
+            if not tr.Hit then return nil end
+            
+            local ent = tr.Entity
+            if not IsValid(ent) or not ent:IsPlayer() then return nil end
+            
+            return ent
+        end
+
+        local function GetPlayerBySteamID(steamid)
+            if not steamid or steamid == "" then return nil end
+            
+            for _, ply in pairs(player.GetAll()) do
+                if ply:SteamID() == steamid then
+                    return ply
+                end
+            end
+            
+            return nil
+        end
+
+            local function SearchRules(keyword)
+            local rules = {
+                ["3.1"] = "NonRP — Соблюдайте правила выбранной профессии.\n• Запрещено взаимодействие с забаненными за стеной в РП профессии.\n• Запрещено захватывать под свою базу территорию более 3-х зданий, а также более 4-х квартир в одном здании\n• Запрещена месть за арест/попытку ареста/ограбление.\n• Запрещено пополнение здоровья и брони во время перестрелки/погони. Вы должны убедиться, что по Вам не наносится урон, и уже после восстановить здоровье или броню.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.2"] = "FreeDamage — Запрещено нанесение урона игроку без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 5 минут блокировки. (ban)",
+                
+                ["3.2.1"] = "MassFreeDamage — Запрещено нанесение урона 4 и более игрокам без особой на то РП причины (даже косвенным путем)\n⚡ ПРИ НАРУШЕНИИ: 12 часов блокировки. (ban)",
+                
+                ["3.3"] = "FreeKill — Запрещено убийство 1 игрока без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 15 минут блокировки. (ban)",
+                
+                ["3.3.1"] = "RDM — Запрещено убийство 2-3 игроков без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 30 минут блокировки. (ban)",
+                
+                ["3.3.2"] = "MassRDM — Запрещено убийство 4 и более игроков без особой на то РП причины (даже косвенным путем)\n🔔ИСКЛЮЧЕНИЕ:\n• Самооборона.\n• Стрельба по вашим предметам.\n• Воровство ваших предметов.\n• Попытка связывания и воровство вас.\n⚡ ПРИ НАРУШЕНИИ: 12 часов блокировки. (ban)",
+                
+                ["3.4"] = "NLR — Правило новой жизни.\nПосле смерти Вы должны забыть своего убийцу и все обстоятельства смерти. Абсолютно всё, кроме дома, друзей и Ваших обязанностей.\n⚡ ПРИ НАРУШЕНИИ: 15 минут блокировки. (ban)",
+                
+                ["3.5"] = "FearRP — Вы должны бояться за свою жизнь, а также всего того, что ей угрожает.\n• Если на Вас навели оружие, то запрещено доставать свое оружие, пока вы в прямой видимости наведшего оружие.\n🔔ИСКЛЮЧЕНИЕ: Ножи, монтировка.\n• 3.5 не работает во время рейдов (исключительно для атакующей и обороняющейся сторон), если Вы держали оружие до момента, как Вам начали угрожать оружием.\n• Если Амбрелле и Полиции угрожает один вооруженный человек, то он может дать отпор.\n• Если на Амбреллу и Полицию один вооруженный человек наставил оружие, то он не может достать наручники и надеть их на него.\n🔔ИСКЛЮЧЕНИЕ: Ножи, монтировка.\n• Однако, если угрожающий отвернулся, но при этом он всё еще вооружен, то он может надеть наручники на него.\n• На рейде запрещено намеренно выходить в область прямого огня перестрелки, а также заходить на территорию рейда, если Вы не являетесь участником атакующей или обороняющейся стороны.\n• Если что-то угрожает Вашей жизни (другой человек с оружием и т.п.), то Вы не имеете права использовать какие-либо средства ухода, которые приведут к Вашей смерти (еда и сигарета, которые отнимают Ваше здоровье).\n• Если на Вас навели оружие, то Вы не можете совершать резких движений даже если Вы в наручниках (не относится к движением мыши, но относится к жестам (act)). В таком случае Вас могут арестовать/убить (даже Госслужащий) и это не будет считаться [FreeKill'ом/FreeArrest'ом].\n🔔ИСКЛЮЧЕНИЕ:\n• Зомби\n• Амбрелла на базе\n• Полиция в Полицейском Участке\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.6"] = "JobAbuse — Запрещена смена профессий в течение короткого промежутка времени для получения из этого личной выгоды или выгоды для банды, а также для ухода от РП ситуации.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 5 минут блокировки. (ban)",
+                
+                ["3.7"] = "FreeArrest — Запрещен арест 1-2 человек без особой на то РП причины. Продление ареста с РП причиной допустимо.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.8"] = "MassFreeArrest— Запрещен арест 3 и более людей без особой на то РП причины.\n⚡ ПРИ НАРУШЕНИИ: 12 часов блокировки. (ban)",
+                
+                ["3.9"] = "CustomJob — С помощью команды \"/job\" Вы можете лишь уточнить смысл своей профессии, но не менять её.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 5 минут блокировки. (ban)",
+                
+                ["3.10"] = "SpawnAbuse запрещено:\n• использование спавна в целях ухода от РП ситуации (ареста, убийства и т.д.)\n• использовать оружие/камеру.\n• заходить на спавн за профессию: Мэр и Управляющий Амбреллы.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.11"] = "NickNameAbuse запрещено:\n• Нечитаемый никнейм\n• Копировать чужой никнейм\n• Никнейм с использованием рекламы (Исключение, реклама RusELiteRP)\n⚡ Наказать может только: НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 12 часов блокировки. (ban)",
+                
+                ["3.12"] = "FreeCuff — Запрещено заковывать в наручники 1-2 игроков без РП причины.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.13"] = "MassFreeCuff — Запрещено заковывать в наручники 3 и более людей без РП причины.\n⚡ ПРИ НАРУШЕНИИ: 12 часов блокировки. (ban)",
+                
+                ["3.14"] = "BugAbuse — Запрещено использовать баги в любом их виде.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.15"] = "BanExit — Запрещено покидать разборки.\n⚡ Наказать может только: Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.16"] = "LeaveRolePlay - Запрещено покидать сервер во время РП ситуации\n⚡ Наказать может только: Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["3.17"] = "OrganizationAbuse — Запрещено использовать нацисткую символику в группировках, оскорбления, фальсификации статуса игрока, копировать другие организации.\n⚡ Наказать может только: НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 30 минут блокировки. (ban)",
+                
+                ["3.19"] = "Free Demote - Запрещено увольнение игроков без адекватной на то причины.\nЗапрещено увольнение игрока с профессии без наличия RP обоснования и корректной RP причины (причину «AFK» использовать можно).\nПричиной увольнения игрока может служить нарушение правил профессии/прямых обязанностей.\n| Наказание 3.1",
+                
+                ["nlr"] = "3.4 - NLR — Правило новой жизни.\nПосле смерти Вы должны забыть своего убийцу и все обстоятельства смерти. Абсолютно всё, кроме дома, друзей и Ваших обязанностей.\n⚡ ПРИ НАРУШЕНИИ: 15 минут блокировки. (ban)",
+                
+                ["rdm"] = "3.3.1 - RDM — Запрещено убийство 2-3 игроков без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 30 минут блокировки. (ban)",
+                
+                ["freekill"] = "3.3 - FreeKill — Запрещено убийство 1 игрока без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 15 минут блокировки. (ban)",
+                
+                ["freedamage"] = "3.2 - FreeDamage — Запрещено нанесение урона игроку без особой на то РП причины (даже косвенным путем).\n⚡ ПРИ НАРУШЕНИИ: 5 минут блокировки. (ban)",
+                
+                ["nonrp"] = "3.1 - NonRP — Соблюдайте правила выбранной профессии.\n• Запрещено взаимодействие с забаненными за стеной в РП профессии.\n• Запрещено захватывать под свою базу территорию более 3-х зданий, а также более 4-х квартир в одном здании\n• Запрещена месть за арест/попытку ареста/ограбление.\n• Запрещено пополнение здоровья и брони во время перестрелки/погони. Вы должны убедиться, что по Вам не наносится урон, и уже после восстановить здоровье или броню.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["fearrp"] = "3.5 - FearRP — Вы должны бояться за свою жизнь, а также всего того, что ей угрожает.\n• Если на Вас навели оружие, то запрещено доставать свое оружие, пока вы в прямой видимости наведшего оружие.\n🔔ИСКЛЮЧЕНИЕ: Ножи, монтировка.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["jobabuse"] = "3.6 - JobAbuse — Запрещена смена профессий в течение короткого промежутка времени для получения из этого личной выгоды или выгоды для банды, а также для ухода от РП ситуации.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 5 минут блокировки. (ban)",
+                
+                ["freearrest"] = "3.7 - FreeArrest — Запрещен арест 1-2 человек без особой на то РП причины. Продление ареста с РП причиной допустимо.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["freecuff"] = "3.12 - FreeCuff — Запрещено заковывать в наручники 1-2 игроков без РП причины.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["spawnabuse"] = "3.10 - SpawnAbuse запрещено:\n• использование спавна в целях ухода от РП ситуации (ареста, убийства и т.д.)\n• использовать оружие/камеру.\n• заходить на спавн за профессию: Мэр и Управляющий Амбреллы.\n⚡ ПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)",
+                
+                ["bugabuse"] = "3.14 - BugAbuse — Запрещено использовать баги в любом их виде.\n⚡ Наказать может только Хелпер/НаборАдмин/СабКуратор, Куратор и Root.\nПРИ НАРУШЕНИИ: 10 минут блокировки. (ban)"
+            }
+            
+            local searchTerm = string.lower(keyword)
+            local foundRules = {}
+            
+            if rules[searchTerm] then
+                foundRules[searchTerm] = rules[searchTerm]
+            end
+            
+            for rule, description in pairs(rules) do
+                if string.find(string.lower(rule), searchTerm) or string.find(string.lower(description), searchTerm) then
+                    foundRules[rule] = description
+                end
+            end
+            
+            return foundRules
+        end
+
+        local function OpenRulesWindow(searchKeyword)
+            local foundRules = SearchRules(searchKeyword)
+            
+            local rulesFrame = vgui.Create("DFrame")
+            rulesFrame:SetSize(600, 500)
+            rulesFrame:Center()
+            rulesFrame:SetTitle("Поиск правил: " .. searchKeyword)
+            rulesFrame:ShowCloseButton(true)
+            rulesFrame:SetDraggable(true)
+            rulesFrame:MakePopup()
+            
+            rulesFrame.Paint = function(self, w, h)
+                draw.RoundedBox(8, 0, 0, w, h, Color(25, 25, 35, 250))
+                draw.RoundedBox(8, 2, 2, w-4, h-4, Color(35, 35, 45, 250))
+            end
+            
+            local scrollPanel = vgui.Create("DScrollPanel", rulesFrame)
+            scrollPanel:SetPos(10, 30)
+            scrollPanel:SetSize(580, 460)
+            
+            if next(foundRules) == nil then
+                local noResultsLabel = vgui.Create("DLabel", scrollPanel)
+                noResultsLabel:SetPos(10, 10)
+                noResultsLabel:SetSize(560, 30)
+                noResultsLabel:SetText("Правила не найдены для: " .. searchKeyword)
+                noResultsLabel:SetFont("DermaLarge")
+                noResultsLabel:SetTextColor(Color(255, 100, 100))
+            else
+                local yPos = 10
+                for rule, description in pairs(foundRules) do
+                    local ruleLabel = vgui.Create("DLabel", scrollPanel)
+                    ruleLabel:SetPos(10, yPos)
+                    ruleLabel:SetSize(560, 20)
+                    ruleLabel:SetText("=== " .. rule .. " ===")
+                    ruleLabel:SetFont("DermaLarge")
+                    ruleLabel:SetTextColor(Color(255, 255, 100))
+                    
+                    yPos = yPos + 25
+                    
+                    local descLabel = vgui.Create("DLabel", scrollPanel)
+                    descLabel:SetPos(10, yPos)
+                    descLabel:SetSize(560, 20)
+                    descLabel:SetText(description)
+                    descLabel:SetFont("DermaDefault")
+                    descLabel:SetTextColor(Color(255, 255, 255))
+                    descLabel:SetWrap(true)
+                    descLabel:SetAutoStretchVertical(true)
+                    
+                    local textHeight = select(2, surface.GetTextSize(description))
+                    local lines = math.ceil(textHeight / 20) + 1
+                    yPos = yPos + (lines * 20) + 20
+                end
+            end
+        end
+
+        local function OpenTemplatesMenu(timeEntry, timeCombo, reasonEntry)
+            local templatesFrame = vgui.Create("DFrame")
+            templatesFrame:SetSize(700, 600)
+            templatesFrame:Center()
+            templatesFrame:SetTitle("Меню заготовок - Выберите нарушение")
+            templatesFrame:ShowCloseButton(true)
+            templatesFrame:SetDraggable(true)
+            templatesFrame:MakePopup()
+            
+            templatesFrame.Paint = function(self, w, h)
+                draw.RoundedBox(8, 0, 0, w, h, Color(25, 25, 35, 250))
+                draw.RoundedBox(8, 2, 2, w-4, h-4, Color(35, 35, 45, 250))
+            end
+            
+            local scrollPanel = vgui.Create("DScrollPanel", templatesFrame)
+            scrollPanel:SetPos(10, 30)
+            scrollPanel:SetSize(680, 560)
+            
+            local function CreateTemplateButton(parent, x, y, text, time, unit, reason)
+                local btn = vgui.Create("DButton", parent)
+                btn:SetPos(x, y)
+                btn:SetSize(220, 35)
+                btn:SetText(text)
+                btn:SetTextColor(Color(255, 255, 255))
+                btn.Paint = function(self, w, h)
+                    if self:IsHovered() then
+                        draw.RoundedBox(6, 0, 0, w, h, Color(60, 60, 80))
+                    else
+                        draw.RoundedBox(6, 0, 0, w, h, Color(50, 50, 70))
+                    end
+                end
+                btn.DoClick = function()
+                    timeEntry:SetText(time)
+                    timeCombo:SetValue(unit)
+                    reasonEntry:SetText(reason)
+                    templatesFrame:Close()
+                end
+                return btn
+            end
+            
+            local yPos = 10
+            local xPos = 10
+            
+            CreateTemplateButton(scrollPanel, xPos, yPos, "FreeKill - 3.3", "15", "mi", "3.3")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "RDM - 3.3.1", "30", "mi", "3.3.1")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "MassRDM - 3.3.2", "12", "h", "3.3.2")
+            
+            yPos = yPos + 45
+            xPos = 10
+            CreateTemplateButton(scrollPanel, xPos, yPos, "NonRP - 3.1", "10", "mi", "3.1")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "FreeDamage - 3.2", "5", "mi", "3.2")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "MassFreeDamage - 3.2.1", "12", "h", "3.2.1")
+            
+            yPos = yPos + 45
+            xPos = 10
+            CreateTemplateButton(scrollPanel, xPos, yPos, "NLR - 3.4", "15", "mi", "3.4")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "FearRP - 3.5", "10", "mi", "3.5")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "FreeArrest - 3.7", "10", "mi", "3.7")
+            
+            yPos = yPos + 45
+            xPos = 10
+            CreateTemplateButton(scrollPanel, xPos, yPos, "MassFreeArrest - 3.8", "12", "h", "3.8")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "FreeCuff - 3.12", "10", "mi", "3.12")
+            xPos = xPos + 230
+            CreateTemplateButton(scrollPanel, xPos, yPos, "MassFreeCuff - 3.13", "12", "h", "3.13")
+            
+
+        end
+
+        local function OpenBanMenu()
+            local target = GetPlayerLookingAt()
+            local frame = vgui.Create("DFrame")
+            frame:SetSize(500, 650)
+            frame:Center()
+            frame:SetTitle("")
+            frame:ShowCloseButton(false)
+            frame:SetDraggable(true)
+            frame:MakePopup()
+            
+            frame.Paint = function(self, w, h)
+                draw.RoundedBox(8, 0, 0, w, h, Color(25, 25, 35, 250))
+                draw.RoundedBox(8, 2, 2, w-4, h-4, Color(35, 35, 45, 250))
+                
+                draw.RoundedBox(8, 0, 0, w, 60, Color(45, 45, 55, 250))
+                draw.RoundedBox(8, 2, 2, w-4, 56, Color(55, 55, 65, 250))
+                
+                surface.SetDrawColor(70, 70, 80)
+                surface.DrawLine(0, 60, w, 60)
+            end
+            
+            local titleLabel = vgui.Create("DLabel", frame)
+            titleLabel:SetPos(20, 15)
+            titleLabel:SetSize(460, 30)
+            titleLabel:SetText("Ban Pistol - F7")
+            titleLabel:SetFont("DermaLarge")
+            titleLabel:SetTextColor(Color(255, 255, 255))
+            
+            local coderLabel = vgui.Create("DLabel", frame)
+            coderLabel:SetPos(20, 35)
+            coderLabel:SetSize(460, 20)
+            coderLabel:SetText("Coder - Nato")
+            coderLabel:SetFont("DermaDefault")
+            coderLabel:SetTextColor(Color(150, 150, 170))
+            
+            local closeBtn = vgui.Create("DButton", frame)
+            closeBtn:SetPos(460, 15)
+            closeBtn:SetSize(25, 25)
+            closeBtn:SetText("✕")
+            closeBtn:SetTextColor(Color(255, 255, 255))
+            closeBtn.Paint = function(self, w, h)
+                if self:IsHovered() then
+                    draw.RoundedBox(4, 0, 0, w, h, Color(200, 50, 50))
+                else
+                    draw.RoundedBox(4, 0, 0, w, h, Color(80, 80, 90))
+                end
+            end
+            closeBtn.DoClick = function()
+                frame:Close()
+            end
+            
+            local targetLabel = vgui.Create("DLabel", frame)
+            targetLabel:SetPos(20, 80)
+            targetLabel:SetSize(460, 20)
+            targetLabel:SetText("Цель бана:")
+            targetLabel:SetFont("DermaDefault")
+            targetLabel:SetTextColor(Color(255, 255, 255))
+            
+            local targetCombo = vgui.Create("DComboBox", frame)
+            targetCombo:SetPos(20, 110)
+            targetCombo:SetSize(200, 30)
+            targetCombo:AddChoice("Игрок на которого смотрю", "look")
+            targetCombo:AddChoice("Ввести SteamID вручную", "manual")
+            targetCombo:SetValue("Игрок на которого смотрю")
+            targetCombo.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+            end
+            
+            local steamidEntry = vgui.Create("DTextEntry", frame)
+            steamidEntry:SetPos(240, 110)
+            steamidEntry:SetSize(240, 30)
+            steamidEntry:SetText("")
+            steamidEntry:SetPlaceholderText("Введите SteamID")
+            steamidEntry:SetEnabled(false)
+            steamidEntry.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+                self:DrawTextEntryText(Color(255, 255, 255), Color(70, 70, 80), Color(255, 255, 255))
+            end
+            
+            local avatar = vgui.Create("AvatarImage", frame)
+            avatar:SetPos(20, 160)
+            avatar:SetSize(80, 80)
+            if target and IsValid(target) then
+                avatar:SetPlayer(target, 80)
+            else
+                avatar:SetSteamID("BOT")
+            end
+            
+            local nickLabel = vgui.Create("DLabel", frame)
+            nickLabel:SetPos(120, 160)
+            nickLabel:SetSize(360, 25)
+            if target and IsValid(target) then
+                nickLabel:SetText("Ник: " .. target:Nick())
+            else
+                nickLabel:SetText("Ник: Не выбран")
+            end
+            nickLabel:SetFont("DermaLarge")
+            nickLabel:SetTextColor(Color(255, 255, 255))
+            
+            local steamidLabel = vgui.Create("DLabel", frame)
+            steamidLabel:SetPos(120, 190)
+            steamidLabel:SetSize(360, 20)
+            if target and IsValid(target) then
+                steamidLabel:SetText("SteamID: " .. target:SteamID())
+            else
+                steamidLabel:SetText("SteamID: Не выбран")
+            end
+            steamidLabel:SetFont("DermaDefault")
+            steamidLabel:SetTextColor(Color(150, 150, 170))
+            
+            local function UpdatePlayerInfo(target, steamidEntry)
+                if target and IsValid(target) then
+                    avatar:SetPlayer(target, 80)
+                    nickLabel:SetText("Ник: " .. target:Nick())
+                    steamidLabel:SetText("SteamID: " .. target:SteamID())
+                else
+                    avatar:SetSteamID("BOT")
+                    nickLabel:SetText("Ник: Не найден")
+                    steamidLabel:SetText("SteamID: " .. (steamidEntry:GetValue() or ""))
+                end
+            end
+            
+            targetCombo.OnSelect = function(self, index, value, data)
+                if data == "manual" then
+                    steamidEntry:SetEnabled(true)
+                    steamidEntry:SetText("")
+                    steamidEntry:RequestFocus()
+                else
+                    steamidEntry:SetEnabled(false)
+                    steamidEntry:SetText("")
+                    UpdatePlayerInfo(target, steamidEntry)
+                end
+            end
+            
+            steamidEntry.OnEnter = function(self)
+                local steamid = self:GetValue()
+                if steamid and steamid ~= "" then
+                    local foundPlayer = GetPlayerBySteamID(steamid)
+                    UpdatePlayerInfo(foundPlayer, steamidEntry)
+                end
+            end
+            
+            local timeLabel = vgui.Create("DLabel", frame)
+            timeLabel:SetPos(20, 260)
+            timeLabel:SetSize(460, 20)
+            timeLabel:SetText("Время бана:")
+            timeLabel:SetFont("DermaDefault")
+            timeLabel:SetTextColor(Color(255, 255, 255))
+            
+            local timeEntry = vgui.Create("DTextEntry", frame)
+            timeEntry:SetPos(20, 290)
+            timeEntry:SetSize(200, 30)
+            timeEntry:SetText("0")
+            timeEntry.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+                self:DrawTextEntryText(Color(255, 255, 255), Color(70, 70, 80), Color(255, 255, 255))
+            end
+            
+            local timeCombo = vgui.Create("DComboBox", frame)
+            timeCombo:SetPos(240, 290)
+            timeCombo:SetSize(240, 30)
+            timeCombo:AddChoice("mi", "mi")
+            timeCombo:AddChoice("h", "h")
+            timeCombo:SetValue("mi")
+            timeCombo.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+            end
+            
+            local reasonLabel = vgui.Create("DLabel", frame)
+            reasonLabel:SetPos(20, 340)
+            reasonLabel:SetSize(460, 20)
+            reasonLabel:SetText("Причина бана:")
+            reasonLabel:SetFont("DermaDefault")
+            reasonLabel:SetTextColor(Color(255, 255, 255))
+            
+            local reasonEntry = vgui.Create("DTextEntry", frame)
+            reasonEntry:SetPos(20, 370)
+            reasonEntry:SetSize(460, 30)
+            reasonEntry:SetText("")
+            reasonEntry.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+                self:DrawTextEntryText(Color(255, 255, 255), Color(70, 70, 80), Color(255, 255, 255))
+            end
+            
+            local templatesLabel = vgui.Create("DLabel", frame)
+            templatesLabel:SetPos(20, 420)
+            templatesLabel:SetSize(460, 20)
+            templatesLabel:SetText("Быстрые шаблоны:")
+            templatesLabel:SetFont("DermaDefault")
+            templatesLabel:SetTextColor(Color(255, 255, 255))
+            
+            -- поиск говна (xD)
+            local searchLabel = vgui.Create("DLabel", frame)
+            searchLabel:SetPos(20, 450)
+            searchLabel:SetSize(200, 20)
+            searchLabel:SetText("Поиск правил:")
+            searchLabel:SetFont("DermaDefault")
+            searchLabel:SetTextColor(Color(255, 255, 255))
+            
+            local searchEntry = vgui.Create("DTextEntry", frame)
+            searchEntry:SetPos(20, 470)
+            searchEntry:SetSize(200, 25)
+            searchEntry:SetText("")
+            searchEntry:SetPlaceholderText("Введите правило (например: nlr)")
+            searchEntry.Paint = function(self, w, h)
+                draw.RoundedBox(6, 0, 0, w, h, Color(45, 45, 55))
+                draw.RoundedBox(6, 2, 2, w-4, h-4, Color(55, 55, 65))
+                self:DrawTextEntryText(Color(255, 255, 255), Color(70, 70, 80), Color(255, 255, 255))
+            end
+            
+            local searchButton = vgui.Create("DButton", frame)
+            searchButton:SetPos(230, 470)
+            searchButton:SetSize(80, 25)
+            searchButton:SetText("Найти")
+            searchButton:SetTextColor(Color(255, 255, 255))
+            searchButton.Paint = function(self, w, h)
+                if self:IsHovered() then
+                    draw.RoundedBox(6, 0, 0, w, h, Color(60, 60, 80))
+                else
+                    draw.RoundedBox(6, 0, 0, w, h, Color(50, 50, 70))
+                end
+            end
+            searchButton.DoClick = function()
+                local searchText = searchEntry:GetValue()
+                if searchText and searchText ~= "" then
+                    OpenRulesWindow(searchText)
+                end
+            end
+            
+            local templatesButton = vgui.Create("DButton", frame)
+            templatesButton:SetPos(20, 510)
+            templatesButton:SetSize(460, 40)
+            templatesButton:SetText("📋 ОТКРЫТЬ МЕНЮ ЗАГОТОВОК")
+            templatesButton:SetFont("DermaLarge")
+            templatesButton:SetTextColor(Color(255, 255, 255))
+            templatesButton.Paint = function(self, w, h)
+                if self:IsHovered() then
+                    draw.RoundedBox(8, 0, 0, w, h, Color(60, 80, 100))
+                else
+                    draw.RoundedBox(8, 0, 0, w, h, Color(50, 70, 90))
+                end
+            end
+            templatesButton.DoClick = function()
+                OpenTemplatesMenu(timeEntry, timeCombo, reasonEntry)
+            end
+            
+            local simpleBanButton = vgui.Create("DButton", frame)
+            simpleBanButton:SetPos(20, 570)
+            simpleBanButton:SetSize(220, 40)
+            simpleBanButton:SetText("ПРОСТОЙ БАН")
+            simpleBanButton:SetFont("DermaLarge")
+            simpleBanButton:SetTextColor(Color(255, 255, 255))
+            simpleBanButton.Paint = function(self, w, h)
+                if self:IsHovered() then
+                    draw.RoundedBox(8, 0, 0, w, h, Color(100, 100, 200))
+                else
+                    draw.RoundedBox(8, 0, 0, w, h, Color(80, 80, 160))
+                end
+            end
+            simpleBanButton.DoClick = function()
+                local timeValue = timeEntry:GetValue()
+                local timeUnit = timeCombo:GetValue()
+                
+                local finalSteamID = ""
+                if targetCombo:GetValue() == "Игрок на которого смотрю" then
+                    if target and IsValid(target) then
+                        finalSteamID = target:SteamID()
+                    else
+                        chat.AddText(Color(255, 0, 0), "Вы не смотрите на игрока!")
+                        return
+                    end
+                else
+                    finalSteamID = steamidEntry:GetValue()
+                    if finalSteamID == "" then
+                        chat.AddText(Color(255, 0, 0), "Введите SteamID!")
+                        return
+                    end
+                end
+                
+                if not finalSteamID or finalSteamID == "" then
+                    chat.AddText(Color(255, 0, 0), "Ошибка: неверный SteamID!")
+                    return
+                end
+                
+                local command = "!ban " .. finalSteamID .. " " .. timeValue .. timeUnit
+                chat.AddText(Color(255, 255, 0), command)
+                RunConsoleCommand("say", command)
+                
+                frame:Close()
+            end
+            
+            local banButton = vgui.Create("DButton", frame)
+            banButton:SetPos(260, 570)
+            banButton:SetSize(220, 40)
+            banButton:SetText("ПОЛНЫЙ БАН")
+            banButton:SetFont("DermaLarge")
+            banButton:SetTextColor(Color(255, 255, 255))
+            banButton.Paint = function(self, w, h)
+                if self:IsHovered() then
+                    draw.RoundedBox(8, 0, 0, w, h, Color(200, 50, 50))
+                else
+                    draw.RoundedBox(8, 0, 0, w, h, Color(150, 50, 50))
+                end
+            end
+            banButton.DoClick = function()
+                local timeValue = timeEntry:GetValue()
+                local timeUnit = timeCombo:GetValue()
+                local reason = reasonEntry:GetValue()
+                if reason == "" then reason = "Не указана" end
+                
+                local finalSteamID = ""
+                if targetCombo:GetValue() == "Игрок на которого смотрю" then
+                    if target and IsValid(target) then
+                        finalSteamID = target:SteamID()
+                    else
+                        chat.AddText(Color(255, 0, 0), "Вы не смотрите на игрока!")
+                        return
+                    end
+                else
+                    finalSteamID = steamidEntry:GetValue()
+                    if finalSteamID == "" then
+                        chat.AddText(Color(255, 0, 0), "Введите SteamID!")
+                        return
+                    end
+                end
+                
+                if not finalSteamID or finalSteamID == "" then
+                    chat.AddText(Color(255, 0, 0), "Ошибка: неверный SteamID!")
+                    return
+                end
+                
+                local tpCommand = "!tp " .. finalSteamID
+                chat.AddText(Color(0, 255, 255), tpCommand)
+                RunConsoleCommand("say", tpCommand)
+                
+                timer.Simple(1, function()
+                    local violationCommand = "Нарушение: " .. reason
+                    chat.AddText(Color(255, 0, 0), violationCommand)
+                    RunConsoleCommand("say", violationCommand)
+                end)
+                
+                timer.Simple(2, function()
+                    local command = "!ban " .. finalSteamID .. " " .. timeValue .. timeUnit .. " " .. reason
+                    chat.AddText(Color(255, 255, 0), command)
+                    RunConsoleCommand("say", command)
+                end)
+                
+                timer.Simple(3, function()
+                    local pmCommand = "/pm " .. finalSteamID .. " Не согласен - пиши тикет"
+                    chat.AddText(Color(0, 255, 255), pmCommand)
+                    RunConsoleCommand("say", pmCommand)
+                end)
+                
+                frame:Close()
+            end
+        end
+        local f7Pressed = false
+
+        if input.IsKeyDown(KEY_F7) and not f7Pressed then
+            f7Pressed = true
+            OpenBanMenu()
+        elseif not input.IsKeyDown(KEY_F7) then
+            f7Pressed = false
+        end
+            if IsFirstTimePredicted() and key == KEY_G then
+            local ent = LocalPlayer():GetEyeTrace().Entity
+
+            if ent and ent:IsPlayer() then
+                RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
+            end
+        end
+    end
 
 
         if ultimate.cfg.vars["Hitnumbers"] and #ultimate.hitnums > 0 then 
@@ -12820,12 +13439,3 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
     end
 end)
 end
-hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
-    if IsFirstTimePredicted() and key == KEY_G then
-        local ent = LocalPlayer():GetEyeTrace().Entity
-
-        if ent and ent:IsPlayer() then
-            RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
-        end
-    end
-end)
