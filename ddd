@@ -760,8 +760,6 @@ ultimate.cfg.colors["Sky color"] = "145 185 245 255"
 ultimate.cfg.vars["Wall color"] = false 
 ultimate.cfg.colors["Wall color"] = "50 45 65 255"
 ultimate.cfg.vars["Fullbright"] = false 
-ultimate.cfg.vars["Fullbright mode"] = 1
-ultimate.cfg.binds["Fullbright"] = 0
 ultimate.cfg.vars["Disable shadows"] = false
 ultimate.cfg.vars["FogChanger"] = false
 ultimate.cfg.colors["FogChanger"] = "255 255 255 255"
@@ -3680,8 +3678,6 @@ function ultimate.tabs.Visuals()
     ultimate.ui.CheckBox( p, "Sky color", "Sky color", false, false, true )
     ultimate.ui.CheckBox( p, "Wall color", "Wall color", false, false, true )
 
-    ultimate.ui.CheckBox( p, "Fullbright", "Fullbright", false, true )
-    ultimate.ui.ComboBox( p, "Mode", "Fullbright mode", { "Default", "Corvus extreme" } )
     ultimate.ui.CheckBox( p, "Disable shadows", "Disable shadows" )
 
     ultimate.ui.CheckBox( p, "Fog changer", "FogChanger", false, false, true )
@@ -9799,7 +9795,7 @@ do
         if ultimate.cfg.vars["WaterMark"] then
 
             local playerName = IsValid(pLocalPlayer) and pLocalPlayer:Name() or "DISCONNECTED"
-            local txt = "root hack  ◆  " .. playerName .. "  ◆  V1  ◆  UID:1"
+            local txt = "dezzaster  ◆  " .. playerName .. "  ◆  V1  ◆ "
 
             surface.SetFont("Watermark_Bold")
             local txtWidth, txtHeight = surface.GetTextSize(txt)
@@ -11090,11 +11086,6 @@ end
         ultimate.ekd2 = ultimate.IsKeyDown( ultimate.cfg.binds["Player add"] )
         ultimate.ekd3 = ultimate.IsKeyDown( ultimate.cfg.binds["Priority add"] )
 
-        if ultimate.IsKeyDown( ultimate.cfg.binds["Fullbright"] ) and not ultimate.fbkd then
-            ultimate.fbe = not ultimate.fbe
-        end
-
-        ultimate.fbkd = ultimate.IsKeyDown( ultimate.cfg.binds["Fullbright"] )        
 
         if ultimate.cfg.vars["FSpec ClickTP"] and ultimate.IsKeyDown( ultimate.cfg.binds["FSpec ClickTP"] ) then
             local pos = pLocalPlayer:GetEyeTrace().HitPos
@@ -12267,15 +12258,7 @@ end
 
 ultimate.fbe = false
 
-function ultimate.PreRender()
-    if ultimate.cfg.vars["Fullbright"] and ultimate.fbe then
-        render.SetLightingMode( ultimate.cfg.vars["Fullbright mode"] )
-    end
-end
 
-function ultimate.GetMotionBlurValues()
-    render.SetLightingMode( 0 )
-end
 
 ded.ConVarSetFlags( "mat_fullbright", 0 )
 ded.ConVarSetFlags( "r_aspectratio", 0 )
@@ -13417,7 +13400,7 @@ hook.Add("NotifyShouldTransmit", "Ultimate_TrackPlayerJoin", function(ent, shoul
         if not ultimate.alreadyNotified[ent] then
             ultimate.alreadyNotified[ent] = true
             chat.AddText(
-                Color(255, 100, 100), "[root] ",
+                Color(255, 100, 100), "[dezzaster] ",
                 Color(255, 0, 0), "[CHEAT USER]: ",
                 Color(255, 255, 255), ent:Nick(),
                 Color(255, 2, 5), " подключился."
@@ -13435,7 +13418,7 @@ hook.Add("InitPostEntity", "Ultimate_InitialCheck", function()
                 if not ultimate.alreadyNotified[ply] then
                     ultimate.alreadyNotified[ply] = true
                     chat.AddText(
-                        Color(255, 200, 0), "[root] ",
+                        Color(255, 200, 0), "[dezzaster] ",
                         Color(255, 255, 255), ply:Nick() .. " уже на сервере!"
                     )
                 end
@@ -13448,7 +13431,7 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
     if not IsValid(ent) or not ent:IsPlayer() then return end
     if ultimate.knownTrackedPlayers[ent] then
         chat.AddText(
-            Color(255, 100, 100), "[root] ",
+            Color(255, 100, 100), "[dezzaster] ",
             Color(255, 2, 5), ent:Nick() .. " вышел"
         )
         ultimate.knownTrackedPlayers[ent] = nil
