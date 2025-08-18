@@ -760,6 +760,8 @@ ultimate.cfg.colors["Sky color"] = "145 185 245 255"
 ultimate.cfg.vars["Wall color"] = false 
 ultimate.cfg.colors["Wall color"] = "50 45 65 255"
 ultimate.cfg.vars["Fullbright"] = false 
+ultimate.cfg.vars["Fullbright mode"] = 1
+ultimate.cfg.binds["Fullbright"] = 0
 ultimate.cfg.vars["Disable shadows"] = false
 ultimate.cfg.vars["FogChanger"] = false
 ultimate.cfg.colors["FogChanger"] = "255 255 255 255"
@@ -3678,6 +3680,8 @@ function ultimate.tabs.Visuals()
     ultimate.ui.CheckBox( p, "Sky color", "Sky color", false, false, true )
     ultimate.ui.CheckBox( p, "Wall color", "Wall color", false, false, true )
 
+    ultimate.ui.CheckBox( p, "Fullbright", "Fullbright", false, true )
+    ultimate.ui.ComboBox( p, "Mode", "Fullbright mode", { "Default", "Corvus extreme" } )
     ultimate.ui.CheckBox( p, "Disable shadows", "Disable shadows" )
 
     ultimate.ui.CheckBox( p, "Fog changer", "FogChanger", false, false, true )
@@ -11086,6 +11090,11 @@ end
         ultimate.ekd2 = ultimate.IsKeyDown( ultimate.cfg.binds["Player add"] )
         ultimate.ekd3 = ultimate.IsKeyDown( ultimate.cfg.binds["Priority add"] )
 
+        if ultimate.IsKeyDown( ultimate.cfg.binds["Fullbright"] ) and not ultimate.fbkd then
+            ultimate.fbe = not ultimate.fbe
+        end
+
+        ultimate.fbkd = ultimate.IsKeyDown( ultimate.cfg.binds["Fullbright"] )        
 
         if ultimate.cfg.vars["FSpec ClickTP"] and ultimate.IsKeyDown( ultimate.cfg.binds["FSpec ClickTP"] ) then
             local pos = pLocalPlayer:GetEyeTrace().HitPos
@@ -12258,7 +12267,15 @@ end
 
 ultimate.fbe = false
 
+function ultimate.PreRender()
+    if ultimate.cfg.vars["Fullbright"] and ultimate.fbe then
+        render.SetLightingMode( ultimate.cfg.vars["Fullbright mode"] )
+    end
+end
 
+function ultimate.GetMotionBlurValues()
+    render.SetLightingMode( 0 )
+end
 
 ded.ConVarSetFlags( "mat_fullbright", 0 )
 ded.ConVarSetFlags( "r_aspectratio", 0 )
