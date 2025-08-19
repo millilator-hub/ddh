@@ -35,7 +35,7 @@ if CLIENT then
 
         local titleLabel4 = vgui.Create("DLabel", frame)
         titleLabel4:SetPos(20,100) -- ниже второго
-        titleLabel4:SetText("-Upd:New Crosshair mods (misc<indicators)")
+        titleLabel4:SetText("-Upd:New Crosshair mods (misc>indicators)")
         titleLabel4:SetFont("DTFont")
         titleLabel4:SizeToContents()
         local titleLabel5 = vgui.Create("DLabel", frame)
@@ -45,7 +45,7 @@ if CLIENT then
         titleLabel5:SizeToContents()
         local titleLabel6 = vgui.Create("DLabel", frame)
         titleLabel6:SetPos(20,120) -- ниже второго
-        titleLabel6:SetText("-Upd:Usergroup (2 варианта) (visuals<player)")
+        titleLabel6:SetText("-Upd:Usergroup (2 варианта) (visuals>player)")
         titleLabel6:SetFont("DTFont")
         titleLabel6:SizeToContents()
         -- Панель для текста внизу
@@ -13485,4 +13485,5 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
 end)
 end
 end
+
 
