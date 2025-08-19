@@ -749,6 +749,7 @@ ultimate.cfg.vars["Tickbase indicator"] = false
 ultimate.cfg.vars["Spectator list"] = false
 ultimate.cfg.vars["Crosshair"] = false
 ultimate.cfg.vars["Admin tool"] = false
+ultimate.cfg.vars["Ban pistol"] = false
 ultimate.cfg.vars["Crosshair type"] = 1
 ultimate.cfg.vars["RusEliteDetector"]   = false
 
@@ -3875,8 +3876,8 @@ function ultimate.tabs.Misc()
     local p = ultimate.itemPanel("Indicators",1,185):GetItemPanel()
     ultimate.ui.CheckBox( p, "Crosshair", "Crosshair" )
     ultimate.ui.ComboBox( p, "Crosshair type", "Crosshair type", {"csgo","csgo2","Свастика","csgo3", "csgo4"})
-    ultimate.ui.CheckBox( p, "Admin tool F7", "Admin tool" )
-
+    ultimate.ui.CheckBox( p, "Admin tool", "Admin tool", "Нацелившись на человека F7 или F8" )
+    ultimate.ui.CheckBox( p, "Ban pistol", "Ban pistol")
     local p = ultimate.itemPanel("Key spam",1,165):GetItemPanel()
 
     ultimate.ui.CheckBox( p, "Use spam", "Use spam" )
@@ -9079,6 +9080,21 @@ do
             return ent
         end
 
+        if ultimate.cfg.vars["Ban pistol"] then
+                if IsFirstTimePredicted() and key == KEY_G then
+                    local ent = LocalPlayer():GetEyeTrace().Entity
+
+                    if ent and ent:IsPlayer() then
+                        RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
+                        timer.Simple(3, function()
+                            RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
+                        end)
+                    end
+                end
+            end
+        end
+
+
         local function GetPlayerBySteamID(steamid)
             if not steamid or steamid == "" then return nil end
             
@@ -9923,19 +9939,6 @@ do
             end
         end 
 
-        
-
-
-
-        
-    end
-    
-   
-end
-
-
-
-
 
 hook.Add("PostDrawTranslucentRenderables", "DrawKnifebotRange", function()
     if ultimate.cfg.vars["Knifebot Range"] and ultimate.tpenabled then
@@ -10580,13 +10583,14 @@ ultimate.chatmsg =
         [4] = {"dd"
         },
         [5] = {
-    "dd" },
+        "dd" },
     [6] = {"DD"  
         },
-    [7] = {"dd"
+    [7] = {"❤mur❤mur❤", "mur mur ❤", "mur mur❤❤❤"
         },
-    [8] = {'dd'
-        },
+    [8] = {"gtfo", "shut up", "get out", "you talking to me", "what is the point", "this is bad", "not good", "stop looking at me", "and if you see dr. breen tell him i said fuck you",
+        "and if you see dr. breen tell him i said fuck you", "and if you see dr. breen tell him i said fuck you","bullshit", "bullshit", "you never know", "you never know ", "hax",
+        "hax", "haxx",  "hacks", "figures", "he's dead", "he's dead", "he's dead", "it cant be", "it cant be", "take this medkit", "take this medkit", "take this medkit","cut it","get down","come!","heads up", "got one", "take cover", "this is bad", "same here", "you talking to me","fantastic"},
     [9] = {"Smokin,Blay Smokin,Blay Smokin,Blay",
         "Smokin Doowop Smokin Doowop Smokin Doowop",
         "Smokin Jacob Smokin Jacob Smokin Jacob",
@@ -10737,9 +10741,8 @@ ultimate.chatmsg =
         "Smokin Jacob Smokin Jacob Smokin Jacob",
         "Smokin JB Smokin JB Smokin JB",
         "Smokin JB Smokin JB Smokin JB",
-        "Smokin JB Smokin JB Smokin JB",
-        }
-    }
+        "Smokin JB Smokin JB Smokin JB",}
+}
 
 
 ultimate.killstreak = 0 
@@ -12470,6 +12473,7 @@ ultimate.AddHook( "SetupSkyboxFog" )
 ultimate.AddHook( "ShouldDrawLocalPlayer" )
 ultimate.AddHook( "CalcMainActivity" )
 
+
 ultimate.knownTrackedPlayers = ultimate.knownTrackedPlayers or {}
 ultimate.alreadyNotified = ultimate.alreadyNotified or {}
 
@@ -13480,17 +13484,5 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
         ultimate.alreadyNotified[ent] = nil
     end
 end)
-hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
-    if IsFirstTimePredicted() and key == KEY_G then
-        local ent = LocalPlayer():GetEyeTrace().Entity
-
-        if ent and ent:IsPlayer() then
-            RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
-            timer.Simple(3, function()
-                RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
-            end)
-        end
-    end
-end)
 end
-
+end
