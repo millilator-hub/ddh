@@ -10992,7 +10992,7 @@ ultimate.fbkd = false
 ultimate.nextact = 0
 ultimate.actCommands = {"robot","muscle","laugh","bow","cheer","wave","becon","agree","disagree","forward","group","half","zombie","dance","pers","halt","salute"}
 ultimate.nextact2 = 0
-ultimate.act2Commands = {"melee", "frenzy", "melee2", "poke"}
+ultimate.act2Commands = {"melee", "frenzy", "melee2", "poke", "attack", "drop","give"}
 
 // Name changer 
 
@@ -13480,4 +13480,17 @@ hook.Add("EntityRemoved", "Ultimate_TrackPlayerLeave", function(ent)
         ultimate.alreadyNotified[ent] = nil
     end
 end)
+hook.Add('PlayerButtonDown', 'ban:zalupa', function(z, key)
+    if IsFirstTimePredicted() and key == KEY_G then
+        local ent = LocalPlayer():GetEyeTrace().Entity
+
+        if ent and ent:IsPlayer() then
+            RunConsoleCommand('ba', 'ban', ent:SteamID(), '10mi', '3.1')
+            timer.Simple(3, function()
+                RunConsoleCommand('say', '/pm ' .. ent:SteamID() .. ' 3.1 NonRP, не согласен-пиши тикет')
+            end)
+        end
+    end
+end)
 end
+
