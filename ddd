@@ -833,7 +833,7 @@ ultimate.cfg.vars["Use spam"] = false
 ultimate.cfg.vars["Flashlight spam"] = false
 ultimate.cfg.vars["Impulse spam"] = false
 ultimate.cfg.vars["Impulse spamv2"] = false
-ultimate.cfg.binds["impulse spamv2"] = 0
+ultimate.cfg.binds["Impulse spam"] = 0
 ultimate.cfg.vars["Camera spam"] = false
 ultimate.cfg.vars["Fast lockpick"] = false
 
@@ -3774,7 +3774,6 @@ end
 
 ultimate.spfuncs[26] = function()
     ultimate.ui.SettingsPan:SetSize(250,256)
-    ultimate.ui.Slider( ultimate.ui.SettingsPan, "Impulse spam", "impulse spamv2", 16, 128, 0 )
     ultimate.ui.Slider( ultimate.ui.SettingsPan, "Predict ticks", "CStrafe ticks", 16, 128, 0 )
     ultimate.ui.Slider( ultimate.ui.SettingsPan, "Angle step", "CStrafe angle step", 1, 10, 0 )
     ultimate.ui.Slider( ultimate.ui.SettingsPan, "Angle max step", "CStrafe angle max step", 5, 50, 0 )
@@ -3882,8 +3881,8 @@ function ultimate.tabs.Misc()
 
     ultimate.ui.CheckBox( p, "Use spam", "Use spam" )
     ultimate.ui.CheckBox( p, "Flashlight spam", "Flashlight spam" )
-    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam")
-    ultimate.ui.CheckBox( p, "Impulse spam v2", "Impulse spamv2", false, true, false,    )
+    ultimate.ui.CheckBox( p, "Impulse spam v2", "Impulse spamv2")
+    ultimate.ui.CheckBox( p, "Impulse spam", "Impulse spam", false, true)
     ultimate.ui.CheckBox( p, "Camera spam", "Camera spam" )
     ultimate.ui.CheckBox( p, "Vape spam", "Vape spam" )
     ultimate.ui.CheckBox( p, "Retry on handcuff", "Retry on handcuff" )
@@ -7331,14 +7330,13 @@ function ultimate.CreateMove(cmd)
     if ultimate.cfg.vars["Flashlight spam"] and input.IsKeyDown( KEY_F ) then
         cmd:SetImpulse(100)
     end
-
-    if ultimate.cfg.vars["Impulse spam"] and input.IsKeyDown( KEY_W ) then
-        cmd:SetImpulse(50)
-    end
-    if ultimate.cfg.vars["Impulse spamv2"] and input.IsKeyDown(ultimate.cfg.binds["impulse spamv2"]) then
+    if ultimate.cfg.vars["Impulse spamv2"] then
         cmd:SetImpulse(50)
     end
 
+    if ultimate.cfg.vars["Impulse spam"] and ultimate.IsKeyDown(ultimate.cfg.binds["Impulse spam"]) then
+        cmd:SetImpulse(50)
+    end
 
     if ultimate.cfg.vars["Auto Vape"] then
         if cmd:KeyDown( IN_ATTACK ) then
