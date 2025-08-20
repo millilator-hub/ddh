@@ -3,77 +3,86 @@
 require("zxcmodule")
 ded.Write = nil
 ded.Read = nil
-if CLIENT then
-    local function CreateCustomMenu()
-        local frame = vgui.Create("DFrame")
-        frame:SetSize(500, 400) 
-        frame:Center()
-        frame:SetTitle("dezzaster")
-        frame:ShowCloseButton(false)
-        frame:SetDraggable(true)
-        frame:MakePopup()
+    if CLIENT then
+        local menuOpen = false
+        print("DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK  \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK  \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK  \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK  \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK \nDEZZASTER HACK DEZZASTER HACK DEZZASTER HACK DEZZASTER HACK ")
+        local function CreateCustomMenu()
+            if menuOpen then return end -- Проверка, чтобы не создавать несколько раз
+            menuOpen = true
 
-        frame.Paint = function(self, w, h)
-            draw.RoundedBox(8, 0, 0, w, h, Color(61, 8, 8, 30))
-            draw.RoundedBox(8, 2, 2, w-4, h-4, Color(61, 8, 8, 30))
-            draw.RoundedBox(8, 0, 0, w, 60, Color(61, 8, 8, 255))
-            draw.RoundedBox(8, 2, 2, w-4, 56, Color(51, 5, 1, 255))
-            surface.SetDrawColor(70,70,80)                                                                                                                                                                                                                                                   
-        end
+            local frame = vgui.Create("DFrame")
+            frame:SetSize(500, 400)
+            frame:Center()
+            frame:SetTitle("") -- убираем стандартную шапку
+            frame:ShowCloseButton(false) -- отключаем стандартную кнопку закрытия
+            frame:SetDraggable(true)
+            frame:MakePopup()
 
-        -- Первый заголовок
-        local titleLabel1 = vgui.Create("DLabel", frame)
-        titleLabel1:SetPos(20,20)
-        titleLabel1:SetText("Обновление")
-        titleLabel1:SetFont("DermaLarge")
-        titleLabel1:SizeToContents()
-
-        -- Третий заголовок (под вторым)
-        local titleLabel3 = vgui.Create("DLabel", frame)
-        titleLabel3:SetPos(20,60) -- ниже второго
-        titleLabel3:SetText("-Upd:Add friend or priority list(visuals>player)")
-        titleLabel3:SetFont("DTFont")
-        titleLabel3:SizeToContents()
-
-        local titleLabel4 = vgui.Create("DLabel", frame)
-        titleLabel4:SetPos(20,100) -- ниже второго
-        titleLabel4:SetText("-Upd:New Crosshair mods (misc>indicators)")
-        titleLabel4:SetFont("DTFont")
-        titleLabel4:SizeToContents()
-        local titleLabel5 = vgui.Create("DLabel", frame)
-        titleLabel5:SetPos(20,80) -- ниже второго
-        titleLabel5:SetText("-Upd:Impulse spam (misc>key spam)")
-        titleLabel5:SetFont("DTFont")
-        titleLabel5:SizeToContents()
-        local titleLabel6 = vgui.Create("DLabel", frame)
-        titleLabel6:SetPos(20,120) -- ниже второго
-        titleLabel6:SetText("-Upd:Usergroup (2 варианта) (visuals>player)")
-        titleLabel6:SetFont("DTFont")
-        titleLabel6:SizeToContents()
-        -- Панель для текста внизу
-        local bottomPanel = vgui.Create("DPanel", frame)
-        bottomPanel:Dock(BOTTOM)
-        bottomPanel:DockMargin(20,-10,-20,-10) -- отступы
-        bottomPanel:SetTall(50)
-
-        -- Кнопка "Закрыть"
-        local closeBtn = vgui.Create("DButton", frame)
-        closeBtn:SetSize(100,30)
-        closeBtn:SetTextColor(Color(61, 8, 8, 30))
-        -- Расположим кнопку справа снизу
-        closeBtn:SetPos(frame:GetWide() - closeBtn:GetWide() -20 , frame:GetTall() - closeBtn:GetTall() -10 )
-        
-        closeBtn:SetText("✕")
-        
-        function closeBtn:DoClick()
-            if IsValid(frame) then
-                frame:Remove()
+            -- Обработка закрытия для сброса флага
+            frame.OnClose = function()
+                menuOpen = false
             end
+
+            -- Фон и оформление
+            frame.Paint = function(self, w, h)
+                draw.RoundedBox(4, 0, 0, w, h + 1, Color(200, 50, 50, 30))
+                draw.RoundedBox(8, 2, 2, w - 4, h - 4, Color(61, 8, 8, 30))
+                draw.RoundedBox(8, 0, 0, w, 60, Color(61, 8, 8, 255))
+                draw.RoundedBox(8, 2, 2, w - 4, 56, Color(51, 5, 1, 255))
+            end
+
+            local titleLabel = vgui.Create("DLabel", frame)
+            titleLabel:SetPos(0,10)
+            titleLabel:SetSize(frame:GetWide(),50)
+            titleLabel:SetText("D E Z Z A S T E R")
+            titleLabel:SetFont("CloseCaption_Bold")
+            titleLabel:SetColor(Color(220, 120, 120))
+            titleLabel:SetContentAlignment(5)
+
+            local updateHeader = vgui.Create("DLabel", frame)
+            updateHeader:SetPos(20,70)
+            updateHeader:SetText("                           Обновление!")
+            updateHeader:SetFont("CloseCaption_Bold")
+            updateHeader:SizeToContents()
+
+            local updateText = vgui.Create("DLabel", frame)
+            updateText:SetPos(20,50)
+            updateText:SetSize(frame:GetWide() -10 ,300)
+            updateText:SetWrap(true)
+            updateText:SetText("\nUPD:Исправлены ошибки\n UPD: New Killsay mods \nUPD: New Spammer mods \n UPD:Admin tool \n UPD: New Interface \n UPD:Impulse spam v2 \n UPD:Fullbright(не работает с рескином) \n UPD:usergroup (2 variants) \n UPD:Target/Friend list key \n UPD:Crosshair")
+            updateText:SetFont("CreditsText")
+
+            local closeBtn = vgui.Create("DButton", frame)
+            closeBtn:SetSize(30,30)
+            closeBtn:SetPos(frame:GetWide() - closeBtn:GetWide() -10 ,10 )
+            closeBtn:SetText("✕")
+            
+            closeBtn.Paint = function(self,w,h)
+                -- Исправленная строка с цветом
+                draw.RoundedBox(4,0,0,w,h +1 ,Color(200,50 ,50))
+                draw.SimpleText(self:GetText(), "DermaDefault", w/2,h/2,COLOR_WHITE,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+                return true
+            end
+            
+            function closeBtn:DoClick()
+                if IsValid(frame) then
+                    frame:Remove()
+                end
+                menuOpen = false
+            end
+
         end
 
+        -- Запускаем при загрузке скрипта или по необходимости
+        if not menuOpen then 
+            CreateCustomMenu() 
+        end
     end
-    CreateCustomMenu()
-end
+
+-- Или вызовите вручную через консоль:
+-- lua_run_cl CreateCustomMenu()
+
+
 local ultimate                          = {}
 
 
@@ -12436,7 +12445,6 @@ ultimate.AddHook( "PostDrawTranslucentRenderables" )
 ultimate.AddHook( "PreRender" )
 ultimate.AddHook( "GetMotionBlurValues" )
 
-ultimate.AddHook( "DrawPhysgunBeam" )
 
 ultimate.AddHook( "PrePlayerDraw" )
 
