@@ -17,7 +17,7 @@ if CLIENT then
             draw.RoundedBox(8, 0, 0, w, h, Color(61, 8, 8, 30))
             draw.RoundedBox(8, 2, 2, w-4, h-4, Color(61, 8, 8, 30))
             draw.RoundedBox(8, 0, 0, w, 60, Color(61, 8, 8, 255))
-            draw.RoundedBox(8, 2, 2, w-4, 56, Color(56, 5, 14, 30))
+            draw.RoundedBox(8, 2, 2, w-4, 56, Color(51, 5, 1, 255))
             surface.SetDrawColor(70,70,80)                                                                                                                                                                                                                                                   
         end
 
@@ -55,13 +55,6 @@ if CLIENT then
         bottomPanel:Dock(BOTTOM)
         bottomPanel:DockMargin(20,-10,-20,-10) -- отступы
         bottomPanel:SetTall(50)
-
-        -- Текст в панели
-        local bottomText = vgui.Create("DLabel", bottomPanel)
-        bottomText:Dock(FILL)
-        bottomText:SetText("17.08.2025")
-        bottomText:SetWrap(true)
-        bottomText:SetContentAlignment(5)
 
         -- Кнопка "Закрыть"
         local closeBtn = vgui.Create("DButton", frame)
@@ -869,7 +862,6 @@ end
 
 
 
-
 /*
     Miss / Hit logs
 */
@@ -1258,8 +1250,8 @@ do
         surface.SetDrawColor(theme["Frame foreground"].r, theme["Frame foreground"].g, theme["Frame foreground"].b)
         surface.DrawRect(0, 0, w, 25)
 
-        surface.SetFont("DermaSmall")
-        local text = "                                                                                               D E Z Z A S T E R | H A C K"
+        surface.SetFont("HudDefault")
+        local text = "                                        D E Z Z A S T E R | H A C K"
         local text_w, text_h = surface.GetTextSize(text)
         
         surface.SetTextColor(0, 0, 0, 50)
@@ -1389,7 +1381,7 @@ do
         surface.SetDrawColor(ultimate.Colors[54].r, ultimate.Colors[54].g, ultimate.Colors[54].b, borderAlpha)
         surface.DrawOutlinedRect(0, 0, w, h, 1)
    
-        surface.SetFont("DermaSmall")
+        surface.SetFont("CenterPrintText")
         local text = self.txt or ""
         local text_w, text_h = surface.GetTextSize(text)
         
@@ -3186,8 +3178,8 @@ function ultimate.tabs.Aimbot()
     ultimate.ui.CheckBox( p, "Auto fire", "Auto fire", "Automatically fires when targets can be damaged.", false, false, ultimate.spfuncs[2] )
     ultimate.ui.CheckBox( p, "Auto reload", "Auto reload", "Automatically reloads weapon when clip is empty." )
 
-    local p = ultimate.itemPanel("Legit",1,100):GetItemPanel()
-
+    local p = ultimate.itemPanel("Legit",1,100):GetItemPanel()                                      
+                        
     ultimate.ui.CheckBox( p, "Aimbot smoothing", "Aimbot smoothing", false, false, false, ultimate.spfuncs[4] )
     ultimate.ui.CheckBox( p, "Fov limit", "Fov limit", false, false, false, ultimate.spfuncs[5] )
     ultimate.ui.CheckBox( p, "Triggerbot", "Trigger bot", false, true )
@@ -4119,7 +4111,7 @@ ultimate.ttable = {}
 
 ultimate.ttable["Aimbot"]   = ultimate.tabs.Aimbot
 ultimate.ttable["Rage"]     = ultimate.tabs.Rage
-ultimate.ttable["Visuals"]  = ultimate.tabs.Visuals
+ultimate.ttable["Visuals"]  = ultimate.tabs.Visuals 
 ultimate.ttable["Misc"]     = ultimate.tabs.Misc
 ultimate.ttable["Config"] = ultimate.tabs.Config
 ultimate.ttable["Players"]  = ultimate.tabs.Players
@@ -4169,19 +4161,18 @@ function ultimate.tabButton(tab,par)
         
         surface.DrawRect(0,0,width,height)
 
-        surface.SetFont("DermaSmall")
+        surface.SetFont("Trebuchet18")
         surface.SetTextPos(tx,ty)
         surface.DrawText(tab)
     end
 end
-
-ultimate.tabButton( "Aimbot",        ultimate.frame:GetTopPanel() ) 
+ultimate.tabButton("Aimbot",         ultimate.frame:GetTopPanel())
 ultimate.tabButton( "Rage",          ultimate.frame:GetTopPanel() ) 
 ultimate.tabButton( "Visuals",       ultimate.frame:GetTopPanel() ) 
 ultimate.tabButton( "Misc",          ultimate.frame:GetTopPanel() ) 
 ultimate.tabButton( "Config",        ultimate.frame:GetTopPanel() ) 
 ultimate.tabButton( "Players",       ultimate.frame:GetTopPanel() ) 
-ultimate.tabButton( "Entities",       ultimate.frame:GetTopPanel() ) 
+ultimate.tabButton( "Entities",        ultimate.frame:GetTopPanel() ) 
 --ultimate.tabButton( "resolver",       ultimate.frame:GetTopPanel() ) 
                     
 ultimate.ttable["Aimbot"]()
@@ -9786,11 +9777,11 @@ do
         end
         
 
-        surface.SetFont( "veranda" )
+        surface.SetFont( "HudHintTextLarge" )
 
         if ultimate.cfg.vars[ "On screen logs" ] and table.Count( ultimate.onScreenLogs ) > 0 then
             local tick = engine.TickCount()
-            local x, y = screenWidth / 2, screenHeight / 2 + 45 
+            local x, y = screenWidth / -2, screenHeight / 2 + 45 
     
             for k, v in pairs( ultimate.onScreenLogs ) do
 
